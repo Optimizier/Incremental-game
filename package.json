@@ -12,8 +12,7 @@
   },
   "devDependencies": {
     "electron": "^31.0.0",
-    "electron-builder": "^24.13.3",
-    "electron-updater": "^6.3.9"
+    "electron-builder": "^24.13.3"
   },
   "build": {
     "appId": "com.optimizier.incrementalgame",
@@ -51,5 +50,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     }
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
   }
 }
