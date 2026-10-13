@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You are So pretty</title>
+<style>
+  :root { --text: #f1ecff; --muted: #a79fc2; }
+  * { box-sizing: border-box; }
+  html { min-height: 100%; }
+  body {
+    margin: 0; font-family: system-ui, sans-serif; color: var(--text);
+    background: linear-gradient(135deg, #12091f, #0b1d33, #1f0f35, #0b2a2a);
+    background-size: 400% 400%; background-attachment: fixed;
+    animation: bgshift 30s ease-in-out infinite;
+  }
+  @keyframes bgshift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  #stars { position: fixed; inset: 0; z-index: -1; }
+  #app { max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem 5rem; }
+  h1 { text-align: center; font-size: 1.3rem; letter-spacing: .15em; text-transform: uppercase;
+       background: linear-gradient(90deg, #ffd84a, #ff7ad9, #7ad7ff, #ffd84a); background-size: 300% 100%;
+       -webkit-background-clip: text; background-clip: text; color: transparent; animation: shimmer 6s linear infinite; }
+  h2 { font-size: 1rem; margin: 0 0 .6rem; }
+  .muted { color: var(--muted); font-size: .85rem; }
+
+  #coins { text-align: center; font-size: 2.6rem; font-weight: 800; transition: transform .08s;
+           background: linear-gradient(180deg, #fff6b0, #ffb300); -webkit-background-clip: text; background-clip: text; color: transparent;
+           filter: drop-shadow(0 2px 8px rgba(255,180,0,.4)); }
+  #coins.bump { transform: scale(1.06); }
+  #cps { text-align: center; margin-bottom: 1rem; }
+
+  button { font: inherit; border: 0; cursor: pointer; color: #fff; border-radius: 10px; padding: .6rem 1rem;
+           background: var(--c, #3b82f6); transition: transform .1s, filter .15s, box-shadow .15s; }
+  button:hover:not(:disabled) { filter: brightness(1.15); box-shadow: 0 0 14px var(--c, #3b82f6); }
+  button:active:not(:disabled) { transform: scale(.95); }
+  button:disabled { background: #2b2840; color: #6f6a8a; cursor: not-allowed; }
+
+  #clicker { display: block; width: 150px; height: 150px; margin: 0 auto 1.2rem; border-radius: 50%; padding: 0; font-size: 4.2rem; line-height: 1;
+             background: radial-gradient(circle at 30% 28%, var(--g1,#fff3a0), var(--g2,#f5b300) 60%, var(--g3,#a86d00)); box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 30px rgba(var(--glow,255,200,0),.5);
+             animation: coinglow 2.4s ease-in-out infinite alternate; user-select: none; }
+  #clicker:hover:not(:disabled) { box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 50px rgba(var(--glow,255,210,60),.9); }
+  @keyframes coinglow { from { box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 20px rgba(var(--glow,255,200,0),.35); }
+                        to   { box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 45px rgba(var(--glow,255,200,0),.75); } }
+
+  .card { margin-top: 1.2rem; padding: 1rem; border-radius: 16px; background: rgba(255,255,255,.05);
+          border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); }
+  .card.gold   { --c: #d4a017; border-color: rgba(255,215,90,.4);  box-shadow: 0 0 26px rgba(255,200,60,.14); }
+  .card.violet { --c: #8a5cf5; border-color: rgba(176,126,255,.5); box-shadow: 0 0 30px rgba(150,90,255,.22); }
+  .gold h2 { color: #ffd966; } .violet h2 { color: #c9a8ff; }
+
+  .row { display: flex; align-items: center; gap: .6rem; padding: .7rem; margin-bottom: .5rem; border-radius: 12px;
+         background: rgba(0,0,0,.25); border-left: 4px solid var(--c, #666); }
+  .row .info { flex: 1; min-width: 0; }
+  .row .top { display: flex; align-items: center; gap: .4rem; }
+  .row .icon { font-size: 1.3rem; }
+  .row small { display: block; color: var(--muted); margin: .1rem 0 .3rem; }
+  .row.pop { animation: pop .35s ease-out; }
+  @keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.04); box-shadow: 0 0 22px var(--c); } 100% { transform: scale(1); } }
+  .row button { min-width: 96px; }
+
+  .bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--c, #888), #fff8); transition: width .3s; }
+  .units { margin-top: .3rem; font-size: .9rem; line-height: 1.2; }
+  .units span { display: inline-block; animation: unitin .4s ease-out; }
+  .units em { font-style: normal; color: var(--muted); font-size: .8rem; margin-left: .3rem; }
+  @keyframes unitin { from { transform: scale(0) rotate(-90deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+
+  .big { width: 100%; padding: .95rem; margin-bottom: .6rem; font-weight: 800; font-size: 1rem; }
+  .big.ready { background-size: 200% 100%; animation: shimmer 2s linear infinite; box-shadow: 0 0 22px var(--c); }
+  .gold .big.ready   { background-image: linear-gradient(90deg, #c9a227, #ffe27a, #c9a227); color: #2a2000; }
+  .violet .big.ready { background-image: linear-gradient(90deg, #7b4ae0, #d29cff, #7b4ae0); }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+
+  #footer { margin-top: 1.5rem; display: flex; justify-content: center; gap: .5rem; }
+  #footer button { --c: #3a3556; font-size: .8rem; }
+
+  #golden { position: fixed; width: 68px; height: 68px; border-radius: 50%; padding: 0; font-size: 2.2rem; color: #7a5a00; display: none; z-index: 30;
+            background: radial-gradient(circle at 30% 30%, #fff8c0, #e0a800); box-shadow: 0 0 30px #ffd84a, 0 0 70px rgba(255,216,74,.6);
+            animation: gpop .4s ease-out, gwiggle 1.2s .4s ease-in-out infinite; }
+  @keyframes gpop { from { transform: scale(0); } to { transform: scale(1); } }
+  @keyframes gwiggle { 0%,100% { transform: rotate(-12deg) scale(1); } 50% { transform: rotate(12deg) scale(1.12); } }
+
+  #toast { position: fixed; bottom: 1.2rem; left: 50%; transform: translate(-50%, 20px); background: rgba(30,25,55,.95); border: 1px solid rgba(255,255,255,.2);
+           padding: .6rem 1.1rem; border-radius: 10px; opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none; z-index: 60; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  #flash { position: fixed; inset: 0; pointer-events: none; opacity: 0; z-index: 45; }
+  #flash.go { animation: flash .9s ease-out; }
+  @keyframes flash { 0% { opacity: .65; } 100% { opacity: 0; } }
+
+  .float { position: fixed; pointer-events: none; z-index: 40; font-weight: 800; color: #ffe27a; text-shadow: 0 2px 6px #000;
+           animation: floatup 1s ease-out forwards; }
+  @keyframes floatup { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -80px); } }
+  .rise { position: fixed; pointer-events: none; z-index: 5; font-size: 1rem; animation: rise 2.2s ease-out forwards; }
+  @keyframes rise { from { opacity: .9; transform: translateY(0) scale(.8); } to { opacity: 0; transform: translateY(-110px) scale(1.1); } }
+  .spark { position: fixed; width: 9px; height: 9px; border-radius: 50%; pointer-events: none; z-index: 50; animation: spark .95s ease-out forwards; }
+  @keyframes spark { to { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
+
+  .card.casino { --c: #f43f5e; border-color: rgba(251,113,133,.45); box-shadow: 0 0 28px rgba(244,63,94,.18); }
+  .casino h2 { color: #fda4af; }
+  .game { padding: .8rem; margin-bottom: .6rem; border-radius: 12px; background: rgba(0,0,0,.25); border-left: 4px solid var(--c); }
+  .game .locked { display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
+  .game .btns { display: flex; gap: .4rem; flex-wrap: wrap; margin: .5rem 0 .3rem; }
+  .game .payout { font-size: .75rem; margin-top: .4rem; }
+  .reels { display: flex; gap: .5rem; justify-content: center; margin: .6rem 0; }
+  .reel { width: 72px; height: 82px; display: flex; align-items: center; justify-content: center; font-size: 2.4rem;
+          background: rgba(0,0,0,.45); border: 2px solid rgba(255,255,255,.2); border-radius: 10px; }
+  .reel.spin { filter: blur(1.5px); animation: reelshake .12s linear infinite; }
+  .reel.win { border-color: #fbbf24; box-shadow: 0 0 22px #fbbf24; animation: pop .35s ease-out; }
+  @keyframes reelshake { 0% { transform: translateY(-4px); } 50% { transform: translateY(4px); } 100% { transform: translateY(-4px); } }
+  .hand { min-height: 66px; margin-bottom: .3rem; }
+  .pcard { display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 64px; margin: 0 5px 4px 0;
+           border-radius: 7px; background: #fff; color: #111; font-weight: 800; box-shadow: 0 2px 6px rgba(0,0,0,.5); }
+  .pcard.red { color: #d11; }
+  .pcard.back { color: transparent; background: repeating-linear-gradient(45deg, #7b4ae0, #7b4ae0 6px, #5a30b5 6px, #5a30b5 12px); }
+  .pcard.new { animation: dealin .3s ease-out; }
+  @keyframes dealin { from { transform: translateY(-24px) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  #app.wide { max-width: 1100px; }
+  .tabs { display: flex; gap: .5rem; justify-content: center; margin: .3rem 0 1rem; }
+  .tabs button { --c: #3a3556; opacity: .75; }
+  .tabs button.active { --c: #7b4ae0; opacity: 1; box-shadow: 0 0 14px #7b4ae0; }
+  #tp-badge { margin-left: .35rem; min-width: 1.3rem; padding: 0 .4rem; border-radius: 99px; background: #fbbf24; color: #2a2000;
+              font-size: .75rem; font-weight: 800; animation: nodepulse 1s ease-in-out infinite alternate; --c: #fbbf24; }
+
+  #combo-wrap { max-width: 260px; margin: -.4rem auto 1rem; text-align: center; }
+  #combo-bar { background: linear-gradient(90deg, #fb923c, #fde047); }
+  #frenzy { --c: #f97316; margin-bottom: 1rem; }
+  #frenzy.ready { background-image: linear-gradient(90deg, #f97316, #fde047, #f97316); color: #3a1a00; }
+  body.frenzy::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 20; box-shadow: inset 0 0 140px rgba(255,120,0,.5); }
+  body.frenzy #clicker { animation: coinglow .3s ease-in-out infinite alternate; }
+  .float.crit { color: #ff5fa8; font-size: 1.6rem; }
+  .row.owned { opacity: .7; }
+
+  .tree-scroll { overflow-x: auto; padding-bottom: .5rem; }
+  #tree { position: relative; display: grid; grid-template-columns: repeat(8, minmax(96px, 1fr)); gap: 1.8rem .6rem; min-width: 880px; padding: .5rem; }
+  #tree-lines { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+  .branch-title { text-align: center; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c); z-index: 1; }
+  .node { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: .15rem; text-align: center;
+          padding: .6rem .4rem; border-radius: 14px; background: rgba(15,12,30,.88); border: 2px solid var(--c); color: var(--text); }
+  .node .ni { font-size: 1.6rem; }
+  .node strong { font-size: .8rem; }
+  .node small { font-size: .66rem; color: var(--muted); line-height: 1.25; }
+  .node .cost { margin-top: .2rem; font-size: .7rem; font-weight: 800; padding: .1rem .55rem; border-radius: 99px; background: rgba(255,255,255,.12); }
+  .node .tag { font-size: .6rem; letter-spacing: .12em; color: #ffd84a; font-weight: 800; }
+  .node.locked { filter: grayscale(.8); opacity: .55; border-color: rgba(255,255,255,.18); cursor: not-allowed; }
+  .node.locked:hover { filter: grayscale(.8) !important; box-shadow: none !important; }
+  .node.avail { animation: nodepulse 1.2s ease-in-out infinite alternate; }
+  .node.owned { background: linear-gradient(160deg, var(--c), rgba(20,15,40,.92) 88%); box-shadow: 0 0 18px var(--c); }
+  .node.owned small { color: #fff; }
+  .node.owned .cost { background: rgba(0,0,0,.35); }
+  .node.cap { border-width: 3px; padding: .8rem .5rem; }
+  .node.cap strong { font-size: .92rem; }
+  .node.cap .ni { font-size: 2.2rem; }
+  .node.cap.avail { box-shadow: 0 0 16px #ffd84a; }
+  .node.cap.owned { animation: capglow 1.8s ease-in-out infinite alternate; }
+  @keyframes nodepulse { from { box-shadow: 0 0 5px var(--c); } to { box-shadow: 0 0 22px var(--c); } }
+  @keyframes capglow { from { box-shadow: 0 0 14px var(--c); } to { box-shadow: 0 0 44px var(--c), 0 0 80px var(--c); } }
+
+  .node .rank { font-size: .68rem; font-weight: 800; color: var(--c); }
+  .node.owned .rank { color: #fff; }
+  .node.maxed { border-color: #fff; box-shadow: 0 0 22px var(--c); }
+
+  #buff { display: none; text-align: center; margin: -.6rem 0 .8rem; font-weight: 700; color: #fde047; }
+  .roulette { position: relative; overflow: hidden; height: 134px; margin: .6rem 0; border-radius: 12px; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.18); }
+  .roulette::before, .roulette::after { content: ""; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none; }
+  .roulette::before { left: 0; background: linear-gradient(90deg, rgba(15,12,30,.95), transparent); }
+  .roulette::after { right: 0; background: linear-gradient(-90deg, rgba(15,12,30,.95), transparent); }
+  .marker { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; margin-left: -1.5px; background: #fff; box-shadow: 0 0 12px #fff, 0 0 24px #fbbf24; z-index: 3; }
+  .strip { display: flex; gap: 6px; padding: 12px 0; will-change: transform; }
+  .ritem { flex: 0 0 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+           border-radius: 10px; background: rgba(255,255,255,.07); border-bottom: 4px solid var(--rc); box-shadow: inset 0 -18px 24px -18px var(--rc); }
+  .ritem .ri { font-size: 2.2rem; }
+  .ritem .rn { font-size: .68rem; text-align: center; padding: 0 .25rem; line-height: 1.1; }
+  #case-result { min-height: 2.4rem; text-align: center; margin-bottom: .6rem; }
+  .btns2 { display: flex; flex-direction: column; gap: .35rem; }
+  .skin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: .5rem; }
+  .skin { display: flex; flex-direction: column; align-items: center; gap: .15rem; padding: .6rem .3rem; border-radius: 12px; background: rgba(0,0,0,.28);
+          border: 2px solid var(--rc); cursor: pointer; text-align: center; transition: transform .1s, box-shadow .15s; }
+  .skin.locked { filter: grayscale(1); opacity: .45; cursor: default; }
+  .skin.owned:hover { transform: translateY(-3px); box-shadow: 0 0 16px var(--rc); }
+  .skin.equipped { box-shadow: 0 0 22px var(--rc); background: rgba(255,255,255,.12); }
+  .skin .sem { font-size: 2rem; }
+  .skin .snm { font-size: .72rem; font-weight: 700; }
+  .skin small { font-size: .65rem; color: var(--muted); }
+  .row.ach { opacity: .7; --c: #64748b; }
+  .row.ach.done { opacity: 1; --c: #34d399; }
+  .reward { font-weight: 800; color: #fbbf24; font-size: .8rem; white-space: nowrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div id="flash"></div>
+<div id="app">
+  <h1>I Love You Nahla</h1>
+  <div class="tabs">
+    <button id="tab-game" class="active">Game</button>
+    <button id="tab-cases">Cases</button>
+    <button id="tab-talents">Talent Tree <span id="tp-badge" style="display:none"></span></button>
+  </div>
+  <div id="page-game">
+  <div id="coins">0 coins</div>
+  <div id="cps" class="muted">0 / sec</div>
+  <div id="buff"></div>
+  <button id="clicker" aria-label="Click for coins">&#129689;</button>
+  <div id="combo-wrap" style="display:none">
+    <div class="muted">Combo x<span id="combo-x">1.0</span></div>
+    <div class="bar"><i id="combo-bar"></i></div>
+  </div>
+  <button id="frenzy" class="big" style="display:none"></button>
+
+  <div class="card">
+    <h2>Generators</h2>
+    <div id="shop"></div>
+  </div>
+
+  <div class="card">
+    <h2>Upgrades <span class="muted">(bought with coins, reset when you ascend)</span></h2>
+    <div id="ushop"></div>
+  </div>
+
+  <div class="card casino">
+    <h2>Casino</h2>
+    <div class="muted" id="tickets"></div>
+    <div class="bar" style="margin:.3rem 0 .4rem"><i id="ticket-bar"></i></div>
+    <div class="muted" style="margin-bottom:.8rem">You earn a ticket every minute (max 10). Each play costs 1 ticket, so you can't lose coins. Wins pay in bonus units (20 seconds of your production).</div>
+
+    <div class="game" id="game-slots">
+      <div class="locked" id="slots-locked">
+        <div><strong>&#127920; Slots</strong><small class="muted" style="display:block">Spin three reels for bonus coins</small></div>
+        <button id="slots-unlock"></button>
+      </div>
+      <div class="play" id="slots-play" style="display:none">
+        <strong>&#127920; Slots</strong>
+        <div class="reels"><div class="reel" id="reel0"></div><div class="reel" id="reel1"></div><div class="reel" id="reel2"></div></div>
+        <div class="muted" id="slots-msg">Spin costs 1 ticket.</div>
+        <button id="slots-spin" class="big" style="margin-top:.5rem">Spin (1 ticket)</button>
+        <div class="muted payout">&#127826;x3 &#127819;x5 &#128276;x10 &#128142;x25 7&#65039;&#8419;x100 (three of a kind) | any pair x0.5</div>
+      </div>
+    </div>
+
+    <div class="game" id="game-blackjack">
+      <div class="locked" id="blackjack-locked">
+        <div><strong>&#127183; Blackjack</strong><small class="muted" style="display:block">Beat the dealer for bonus coins</small></div>
+        <button id="blackjack-unlock"></button>
+      </div>
+      <div class="play" id="blackjack-play" style="display:none">
+        <strong>&#127183; Blackjack</strong>
+        <div class="muted" style="margin-top:.4rem">Dealer <span id="bj-dtotal"></span></div>
+        <div class="hand" id="bj-dealer"></div>
+        <div class="muted">You <span id="bj-ptotal"></span></div>
+        <div class="hand" id="bj-player"></div>
+        <div class="muted" id="bj-msg"></div>
+        <div class="btns">
+          <button id="bj-deal">Deal (1 ticket)</button>
+          <button id="bj-hit">Hit</button>
+          <button id="bj-stand">Stand</button>
+        </div>
+        <div class="muted payout">Win x1.5 | Blackjack x2.25 | Push x0.5 | Dealer stands on 17</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card gold">
+    <h2>Layer 1: Prestige</h2>
+    <button id="ascend" class="big"></button>
+    <div id="stats" class="muted"></div>
+    <h2 style="margin-top:1rem">Prestige Upgrades <span id="pp" class="muted"></span></h2>
+    <div id="pshop"></div>
+  </div>
+
+  <div class="card violet">
+    <h2>Layer 2: Transcendence</h2>
+    <button id="transcend" class="big"></button>
+    <div id="sstats" class="muted"></div>
+    <h2 style="margin-top:1rem">Stardust Upgrades <span id="sd" class="muted"></span></h2>
+    <div id="sshop"></div>
+  </div>
+
+  </div>
+
+  <div id="page-cases" style="display:none">
+    <div class="card">
+      <h2>Cases</h2>
+      <div class="muted" id="cases-info"></div>
+      <div class="roulette" id="roulette"><div class="marker"></div><div class="strip" id="strip"></div></div>
+      <div id="case-result" class="muted">Pick a case to open. Cases drop skins (a permanent coin bonus plus a new look for your coin) or bonuses.</div>
+      <div id="case-list"></div>
+    </div>
+    <div class="card violet">
+      <h2>Skin Collection</h2>
+      <div class="muted" id="coll-info" style="margin-bottom:.6rem"></div>
+      <div class="skin-grid" id="skins"></div>
+    </div>
+    <div class="card">
+      <h2>Recent Drops</h2>
+      <div id="recent" class="muted"></div>
+    </div>
+  </div>
+
+  <div id="page-talents" style="display:none">
+    <div class="card violet">
+      <h2>Talent Tree</h2>
+      <div id="tp-info" style="font-weight:800"></div>
+      <div class="muted" id="tp-next" style="margin:.2rem 0 .4rem"></div>
+      <div class="bar" style="margin-bottom:.5rem"><i id="tp-bar"></i></div>
+      <div class="muted" id="tp-break" style="margin-bottom:.7rem"></div>
+      <div class="muted" style="margin-bottom:.7rem">Talents are permanent: they survive ascending and transcending. Many have several ranks. Points come from lifetime coins, +2 per ascension, +5 per transcension, achievements, and rare case drops. Spend down each branch toward its capstone (the capstones need rank 2 in both talents above them), then unite all four branches for The Ascendant.</div>
+      <button id="respec" style="--c:#3a3556;font-size:.85rem">Respec (refund all points)</button>
+    </div>
+    <div class="tree-scroll">
+      <div id="tree"><svg id="tree-lines"></svg></div>
+    </div>
+    <div class="card gold" style="margin-top:1.2rem">
+      <h2>Achievements <span id="ach-sum" class="muted"></span></h2>
+      <div id="ach-list"></div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <button id="save">Save</button>
+    <button id="reset">Hard Reset</button>
+  </div>
+</div>
+
+<button id="golden" title="Golden coin!">&#10022;</button>
+<div id="toast"></div>
+
+<script>
+// ---------- 1. DATA ----------
+const GENERATORS = [
+  { id: "cursor",  name: "Cursor",  icon: "\u{1F446}", color: "#4ade80", baseCost: 15,    baseCps: 0.1 },
+  { id: "miner",   name: "Miner",   icon: "\u26CF\uFE0F", color: "#fb923c", baseCost: 100,   baseCps: 1   },
+  { id: "factory", name: "Factory", icon: "\u{1F3ED}", color: "#38bdf8", baseCost: 1100,  baseCps: 8   },
+  { id: "portal",  name: "Portal",  icon: "\u{1F300}", color: "#c084fc", baseCost: 12000, baseCps: 47  },
+];
+const COST_GROWTH = 1.15;
+const MILESTONES = [10, 25, 50, 100, 200];
+
+const PRESTIGE_UPGRADES = [
+  { id: "touch",    name: "Golden Touch",  desc: "+100% click power per level",          baseCost: 1, growth: 2,   max: 10 },
+  { id: "discount", name: "Bulk Discount", desc: "Generators 5% cheaper per level",      baseCost: 2, growth: 2,   max: 10 },
+  { id: "synergy",  name: "Synergy",       desc: "+25% coins/sec per level",             baseCost: 3, growth: 2.5, max: 10 },
+  { id: "head",     name: "Head Start",    desc: "Start each run with 500 coins/level",  baseCost: 2, growth: 2,   max: 10 },
+];
+const PP_BONUS = 0.10;
+const PP_DIVISOR = 10000;
+
+const STARDUST_UPGRADES = [
+  { id: "ppboost",  name: "Cosmic Insight",  desc: "+25% prestige points gained per level",       baseCost: 1, growth: 2, max: 10 },
+  { id: "residual", name: "Residual Energy", desc: "Start each transcension with 5 PP per level", baseCost: 1, growth: 2, max: 10 },
+  { id: "timewarp", name: "Time Warp",       desc: "+2 hours offline progress cap per level",     baseCost: 2, growth: 2, max: 5  },
+  { id: "auto",     name: "Auto-Buyer",      desc: "Automatically buys generators for you",       baseCost: 3, growth: 1, max: 1  },
+];
+const SD_BONUS = 0.50;
+const SD_DIVISOR = 25;
+const BASE_OFFLINE_HOURS = 8;
+const SAVE_KEY = "incremental-template-v2";
+const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TICKET_BASE_MAX = 10, TICKET_BASE_SECONDS = 60;   // casino tickets: one per minute, stores up to 10
+const CASINO_GAMES = [
+  { id: "slots",     name: "Slots",     cost: 2500  },
+  { id: "blackjack", name: "Blackjack", cost: 10000 },
+];
+
+// Per-run upgrades bought with coins. They reset when you ascend (cheap to rebuy as you grow).
+const UPGRADES = [
+  { id: "sharper",   icon: "\u{1F446}", name: "Sharper Fingers", cost: 500,     desc: "Click power x2" },
+  { id: "lucky",     icon: "\u{1F340}", name: "Lucky Clicks",    cost: 2000,    desc: "+10% chance for a x10 critical click" },
+  { id: "combo",     icon: "\u{1F525}", name: "Combo Meter",     cost: 8000,    desc: "Rapid clicking builds your click power up to x3" },
+  { id: "auto",      icon: "\u{1F916}", name: "Auto-Clicker",    cost: 25000,   desc: "Clicks for you 4 times a second at half power" },
+  { id: "magnet",    icon: "\u{1F9F2}", name: "Golden Magnet",   cost: 50000,   desc: "Golden coins appear 2x as often and last 50% longer" },
+  { id: "frenzy",    icon: "\u26A1",    name: "Frenzy",          cost: 100000,  desc: "Unlocks the Frenzy button: x7 clicks and production for 20s (2 min cooldown)" },
+  { id: "overclock", icon: "\u{1F680}", name: "Overclock",       cost: 1000000, desc: "+50% generator output" },
+];
+
+// Talent tree. Rows go top to bottom: 1 (cheap) to 4, row 5 is the capstone, row 6 the ultimate.
+// Each talent has several ranks. A child needs rank "rr" (default 1) in every parent.
+const BRANCHES = [
+  { name: "Wealth",   icon: "💰", color: "#fbbf24" },
+  { name: "Fingers",  icon: "👆", color: "#fb7185" },
+  { name: "Fortune",  icon: "🍀", color: "#34d399" },
+  { name: "Treasure", icon: "🎁", color: "#38bdf8" },
+];
+const GRAND_COLOR = "#c084fc";
+const TALENTS = [
+  // --- Wealth ---
+  { id: "w1",  branch: 0, row: 1, max: 3, cost: 1, icon: "🏷️", name: "Thrifty Start",     desc: "Generators cost 3% less per rank", req: [] },
+  { id: "w2a", branch: 0, row: 2, col: 0, max: 5, cost: 1, icon: "🏭", name: "Mass Production",   desc: "+10% generator output per rank", req: ["w1"] },
+  { id: "w2b", branch: 0, row: 2, col: 1, max: 3, cost: 1, icon: "📈", name: "Compound Interest", desc: "+0.3% output per generator owned, per rank", req: ["w1"] },
+  { id: "w3a", branch: 0, row: 3, col: 0, max: 1, cost: 2, icon: "⚙️", name: "Assembly Line",     desc: "Cursors and Miners produce x2", req: ["w2a"] },
+  { id: "w3b", branch: 0, row: 3, col: 1, max: 1, cost: 2, icon: "💠", name: "Deep Veins",        desc: "Factories and Portals produce x2", req: ["w2b"] },
+  { id: "w4a", branch: 0, row: 4, col: 0, max: 3, cost: 2, icon: "📉", name: "Economy of Scale",  desc: "Generator prices climb more slowly, per rank", req: ["w3a"] },
+  { id: "w4b", branch: 0, row: 4, col: 1, max: 3, cost: 2, icon: "💵", name: "Dividends",         desc: "+2% output per ascension done (max 50), per rank", req: ["w3b"] },
+  { id: "w5",  branch: 0, row: 5, max: 1, cost: 5, rr: 2, icon: "👑", name: "Midas Engine", tag: "CAPSTONE", desc: "ALL generator output x3 and generators 15% cheaper", req: ["w4a", "w4b"] },
+  // --- Fingers ---
+  { id: "c1",  branch: 1, row: 1, max: 5, cost: 1, icon: "🖐️", name: "Calloused Hands",   desc: "+40% click power per rank", req: [] },
+  { id: "c2a", branch: 1, row: 2, col: 0, max: 5, cost: 1, icon: "🎯", name: "Critical Eye",    desc: "+3% critical click chance per rank", req: ["c1"] },
+  { id: "c2b", branch: 1, row: 2, col: 1, max: 3, cost: 1, icon: "🔥", name: "Combo Master",    desc: "Combo cap +1 and slower fade, per rank (needs Combo Meter)", req: ["c1"] },
+  { id: "c3a", branch: 1, row: 3, col: 0, max: 3, cost: 2, icon: "👻", name: "Phantom Fingers", desc: "Automatic clicks +20% power per rank", req: ["c2a"] },
+  { id: "c3b", branch: 1, row: 3, col: 1, max: 3, cost: 2, icon: "⚡", name: "Frenzy Focus",    desc: "Rank 1 unlocks Frenzy. Each rank: +2 power, +5s, -15s cooldown", req: ["c2b"] },
+  { id: "c4a", branch: 1, row: 4, col: 0, max: 3, cost: 2, icon: "💥", name: "Devastating Crits", desc: "Critical clicks hit +5x harder per rank", req: ["c3a"] },
+  { id: "c4b", branch: 1, row: 4, col: 1, max: 3, cost: 2, icon: "☄️", name: "Finger Power",    desc: "Each click also gives +5% of your coins/sec per rank", req: ["c3b"] },
+  { id: "c5",  branch: 1, row: 5, max: 1, cost: 5, rr: 2, icon: "☝️", name: "Finger of God", tag: "CAPSTONE", desc: "Clicks also give +25% of your coins/sec. Base crit damage x25", req: ["c4a", "c4b"] },
+  // --- Fortune ---
+  { id: "f1",  branch: 2, row: 1, max: 3, cost: 1, icon: "🍀", name: "Lucky Penny",       desc: "Golden coins appear 10% more often and last 20% longer per rank", req: [] },
+  { id: "f2a", branch: 2, row: 2, col: 0, max: 3, cost: 1, icon: "🎟️", name: "Ticket Printer", desc: "Casino tickets regenerate 20% faster per rank", req: ["f1"] },
+  { id: "f2b", branch: 2, row: 2, col: 1, max: 3, cost: 1, icon: "💰", name: "Windfall",        desc: "Golden coins pay +50% per rank", req: ["f1"] },
+  { id: "f3a", branch: 2, row: 3, col: 0, max: 3, cost: 2, icon: "🎰", name: "House Edge",      desc: "Casino wins +15% and +2 ticket capacity per rank", req: ["f2a"] },
+  { id: "f3b", branch: 2, row: 3, col: 1, max: 3, cost: 2, icon: "✨", name: "Pure Insight",    desc: "+10% prestige points gained per rank", req: ["f2b"] },
+  { id: "f4a", branch: 2, row: 4, col: 0, max: 3, cost: 2, icon: "🌠", name: "Golden Frenzy",   desc: "Golden coins have a 10% chance per rank to grant x5 production for 15s", req: ["f3a"] },
+  { id: "f4b", branch: 2, row: 4, col: 1, max: 3, cost: 2, icon: "⏳", name: "Time Warp",       desc: "+4 hours of offline progress per rank", req: ["f3b"] },
+  { id: "f5",  branch: 2, row: 5, max: 1, cost: 5, rr: 2, icon: "🌟", name: "Fortune's Favorite", tag: "CAPSTONE", desc: "Golden coins pay x3 and appear 2x as often. Casino wins x2", req: ["f4a", "f4b"] },
+  // --- Treasure (cases and skins) ---
+  { id: "t1",  branch: 3, row: 1, max: 3, cost: 1, icon: "🧾", name: "Bulk Orders",       desc: "Cases cost 10% less per rank", req: [] },
+  { id: "t2a", branch: 3, row: 2, col: 0, max: 3, cost: 1, icon: "🔑", name: "Lucky Keys",      desc: "Better odds per rank: fewer Commons, more Rare+ drops", req: ["t1"] },
+  { id: "t2b", branch: 3, row: 2, col: 1, max: 3, cost: 1, icon: "🧽", name: "Skin Polish",     desc: "Skin collection bonus +20% per rank", req: ["t1"] },
+  { id: "t3a", branch: 3, row: 3, col: 0, max: 3, cost: 2, icon: "♻️", name: "Recycling",       desc: "Duplicate skins pay +50% more coins per rank", req: ["t2a"] },
+  { id: "t3b", branch: 3, row: 3, col: 1, max: 3, cost: 2, icon: "🎁", name: "Free Samples",    desc: "Earn free Bronze cases over time (every 15, 10, then 6 min)", req: ["t2b"] },
+  { id: "t4a", branch: 3, row: 4, col: 0, max: 3, cost: 2, icon: "🧲", name: "Bonus Magnet",    desc: "Bonus drops are 25% stronger per rank", req: ["t3a"] },
+  { id: "t4b", branch: 3, row: 4, col: 1, max: 3, cost: 2, icon: "🔮", name: "Legend Seeker",   desc: "Legendary odds +50% per rank", req: ["t3b"] },
+  { id: "t5",  branch: 3, row: 5, max: 1, cost: 5, rr: 2, icon: "🏛️", name: "Grand Collector", tag: "CAPSTONE", desc: "Skin bonus x2, cases 25% cheaper, +1 casino ticket per case opened", req: ["t4a", "t4b"] },
+  // --- Ultimate: needs all four capstones ---
+  { id: "ascend", branch: 4, row: 6, max: 1, cost: 8, icon: "🌌", name: "The Ascendant", tag: "ULTIMATE",
+    desc: "ALL coins and clicks x5, +50% prestige points, +16h offline cap, and every case is Rare or better", req: ["w5", "c5", "f5", "t5"] },
+];
+const freshUpg = () => Object.fromEntries(UPGRADES.map(u => [u.id, false]));
+const freshTal = () => Object.fromEntries(TALENTS.map(t => [t.id, 0]));
+
+// ----- cases, skins, bonuses -----
+const RARITIES = [
+  { name: "Common",    color: "#9ca3af", coll: 0.01, dup: 1  },   // coll = coin bonus per skin owned, dup = bonus units paid for a duplicate
+  { name: "Uncommon",  color: "#4ade80", coll: 0.02, dup: 2  },
+  { name: "Rare",      color: "#60a5fa", coll: 0.04, dup: 5  },
+  { name: "Epic",      color: "#c084fc", coll: 0.08, dup: 12 },
+  { name: "Legendary", color: "#fbbf24", coll: 0.15, dup: 30 },
+];
+const SKINS = [
+  { id: "gold",      default: true, rarity: 0, emoji: "🪙", name: "Gold Coin",     g: ["#fff3a0", "#f5b300", "#a86d00"], glow: "255,200,0" },
+  { id: "copper",    rarity: 0, emoji: "🟤", name: "Copper Coin",   g: ["#f0c9a0", "#b87333", "#6b3f1c"], glow: "184,115,51" },
+  { id: "moon",      rarity: 0, emoji: "🌕", name: "Pale Moon",     g: ["#ffffff", "#e5e7eb", "#9ca3af"], glow: "229,231,235" },
+  { id: "emerald",   rarity: 1, emoji: "🟢", name: "Emerald Coin",  g: ["#b9ffd2", "#22c55e", "#0f6b34"], glow: "34,197,94" },
+  { id: "sky",       rarity: 1, emoji: "🔵", name: "Sky Coin",      g: ["#cfe8ff", "#3b82f6", "#1d3f8f"], glow: "59,130,246" },
+  { id: "ruby",      rarity: 2, emoji: "🔴", name: "Ruby Coin",     g: ["#ffd0d0", "#ef4444", "#7a1111"], glow: "239,68,68" },
+  { id: "amethyst",  rarity: 2, emoji: "🟣", name: "Amethyst Coin", g: ["#ead5ff", "#a855f7", "#4c1d95"], glow: "168,85,247" },
+  { id: "solar",     rarity: 3, emoji: "☀️", name: "Solar Flare",   g: ["#fff7b0", "#fb923c", "#b43b00"], glow: "251,146,60" },
+  { id: "ice",       rarity: 3, emoji: "❄️", name: "Ice Crystal",   g: ["#ffffff", "#7dd3fc", "#0e7490"], glow: "125,211,252" },
+  { id: "galaxy",    rarity: 4, emoji: "🌌", name: "Galaxy",        g: ["#e9d5ff", "#7c3aed", "#1e1b4b"], glow: "124,58,237" },
+  { id: "dragon",    rarity: 4, emoji: "🐉", name: "Dragon Egg",    g: ["#fff3a0", "#f43f5e", "#4a0d1f"], glow: "244,63,94" },
+];
+// kind: coins (amount = bonus units), tickets, buff (mult for secs), tp (talent points)
+const BONUSES = [
+  { id: "b-change", type: "bonus", rarity: 0, icon: "🪙", name: "Pocket Change",  kind: "coins",   amount: 1.5 },
+  { id: "b-pouch",  type: "bonus", rarity: 0, icon: "💰", name: "Coin Pouch",     kind: "coins",   amount: 3 },
+  { id: "b-stash",  type: "bonus", rarity: 1, icon: "🎟️", name: "Ticket Stash",   kind: "tickets", amount: 3 },
+  { id: "b-wallet", type: "bonus", rarity: 1, icon: "👛", name: "Fat Wallet",     kind: "coins",   amount: 8 },
+  { id: "b-boost",  type: "bonus", rarity: 2, icon: "⚡", name: "Boost",          kind: "buff",    mult: 2, secs: 300 },
+  { id: "b-chest",  type: "bonus", rarity: 2, icon: "🧰", name: "Treasure Chest", kind: "coins",   amount: 20 },
+  { id: "b-mega",   type: "bonus", rarity: 3, icon: "🔥", name: "Mega Boost",     kind: "buff",    mult: 3, secs: 600 },
+  { id: "b-spark",  type: "bonus", rarity: 3, icon: "✨", name: "Talent Spark",   kind: "tp",      amount: 1 },
+  { id: "b-surge",  type: "bonus", rarity: 4, icon: "🌠", name: "Talent Surge",   kind: "tp",      amount: 3 },
+  { id: "b-hoard",  type: "bonus", rarity: 4, icon: "🏆", name: "Dragon Hoard",   kind: "coins",   amount: 120 },
+  { id: "b-dilate", type: "bonus", rarity: 4, icon: "⏳", name: "Time Dilation",  kind: "buff",    mult: 5, secs: 600 },
+];
+const ITEMS = SKINS.filter(s => !s.default).map(s => ({ id: s.id, type: "skin", rarity: s.rarity, icon: s.emoji, name: s.name })).concat(BONUSES);
+// price = max(minCost, secs of your income), weights = Common..Legendary
+const CASE_TIERS = [
+  { id: "bronze", name: "Bronze Case", icon: "📦", color: "#cd7f32", minCost: 5000,   secs: 300,  weights: [70, 22, 7, 1, 0.2] },
+  { id: "silver", name: "Silver Case", icon: "🎁", color: "#cbd5e1", minCost: 50000,  secs: 1800, weights: [40, 35, 19, 5, 1] },
+  { id: "gold",   name: "Gold Case",   icon: "👑", color: "#fbbf24", minCost: 500000, secs: 7200, weights: [15, 30, 33, 17, 5] },
+];
+
+// ----- achievements: each pays talent points -----
+const ACHIEVEMENTS = [
+  { id: "clicks100", name: "Warming Up",         desc: "Click the coin 100 times",          tp: 1, goal: 100,   cur: () => state.clicks },
+  { id: "clicks5k",  name: "Carpal Tunnel",      desc: "Click the coin 5,000 times",        tp: 2, goal: 5000,  cur: () => state.clicks },
+  { id: "crit",      name: "Lucky Strike",       desc: "Land 10 critical clicks",           tp: 1, goal: 10,    cur: () => state.crits },
+  { id: "gens50",    name: "Fifty Strong",       desc: "Own 50 of one generator",           tp: 1, goal: 50,    cur: () => Math.max(...GENERATORS.map(g => state.owned[g.id])) },
+  { id: "gens200",   name: "Mass Hysteria",      desc: "Own 200 of one generator",          tp: 2, goal: 200,   cur: () => Math.max(...GENERATORS.map(g => state.owned[g.id])) },
+  { id: "roster",    name: "Full Roster",        desc: "Own 10 of every generator",         tp: 1, goal: 10,    cur: () => Math.min(...GENERATORS.map(g => state.owned[g.id])) },
+  { id: "asc5",      name: "Seasoned Climber",   desc: "Ascend 5 times",                    tp: 2, goal: 5,     cur: () => state.ascensions },
+  { id: "trans1",    name: "Beyond",             desc: "Transcend for the first time",      tp: 2, goal: 1,     cur: () => state.transcensions },
+  { id: "golden10",  name: "Gold Digger",        desc: "Click 10 golden coins",             tp: 1, goal: 10,    cur: () => state.goldens },
+  { id: "golden50",  name: "Midas Magnet",       desc: "Click 50 golden coins",             tp: 2, goal: 50,    cur: () => state.goldens },
+  { id: "casino",    name: "High Roller",        desc: "Unlock both casino games",          tp: 1, goal: 2,     cur: () => Object.values(state.casino).filter(Boolean).length },
+  { id: "case1",     name: "First Crate",        desc: "Open a case",                       tp: 1, goal: 1,     cur: () => state.casesOpened },
+  { id: "case25",    name: "Crate Addict",       desc: "Open 25 cases",                     tp: 2, goal: 25,    cur: () => state.casesOpened },
+  { id: "skins5",    name: "Collector",          desc: "Own 5 different skins",             tp: 2, goal: 5,     cur: () => skinCount() },
+  { id: "legend",    name: "Legendary!",         desc: "Pull a Legendary item",             tp: 2, goal: 1,     cur: () => state.legends },
+  { id: "combo",     name: "In The Zone",        desc: "Fill the combo meter",              tp: 1, goal: 1,     cur: () => state.comboMaxed },
+  { id: "frenzy",    name: "Go Wild",            desc: "Activate Frenzy",                   tp: 1, goal: 1,     cur: () => state.frenzies },
+  { id: "upgrades",  name: "Fully Upgraded",     desc: "Own all upgrades at the same time", tp: 1, goal: UPGRADES.length, cur: () => Object.values(state.upg).filter(Boolean).length },
+];
+
+// ---------- 2. STATE ----------
+function freshState() {
+  return {
+    coins: 0, runEarned: 0, lifetimeEarned: 0, clickPower: 1,
+    owned: Object.fromEntries(GENERATORS.map(g => [g.id, 0])),
+    pp: 0, ppTotal: 0, ascensions: 0,
+    pu: Object.fromEntries(PRESTIGE_UPGRADES.map(u => [u.id, 0])),
+    ppRun: 0,
+    sd: 0, sdTotal: 0, transcensions: 0,
+    su: Object.fromEntries(STARDUST_UPGRADES.map(u => [u.id, 0])),
+    casino: { slots: false, blackjack: false },   // permanent unlocks, survive prestige
+    tickets: 3, casinoWon: 0,
+    upg: freshUpg(),            // per-run upgrades (reset on ascend)
+    talents: freshTal(),        // permanent talent tree
+    tpSeen: 0,                  // talent points already announced
+    frenzyUntil: 0, frenzyReadyAt: 0,
+    skins: { gold: true }, skin: "gold",       // owned skins, equipped skin
+    casesOpened: 0, legends: 0, recent: [], freeCases: 0,
+    buffMult: 1, buffUntil: 0,                 // temporary production boost from drops
+    clicks: 0, crits: 0, goldens: 0, frenzies: 0, comboMaxed: 0,
+    ach: {}, bonusTP: 0,
+    lastTick: Date.now(),
+  };
+}
+let state = freshState();
+
+// ---------- 3. CORE MATH ----------
+const puLevel = id => state.pu[id] || 0;
+const suLevel = id => state.su[id] || 0;
+const prestigeMult = () => 1 + PP_BONUS * state.ppTotal;
+const stardustMult = () => 1 + SD_BONUS * state.sdTotal;
+const globalMult = () => prestigeMult() * stardustMult() * (tal("ascend") ? 5 : 1) * collMult() * buffMult();   // applies to clicks and generators
+const milestoneMult = n => Math.pow(2, MILESTONES.filter(m => n >= m).length);
+
+const rk = id => Number(state.talents[id]) || 0;   // current rank of a talent
+const tal = id => rk(id) > 0;
+const upgOn = id => !!state.upg[id];
+let combo = 0, lastClickAt = 0;   // click combo meter (not saved)
+
+const totalGens = () => GENERATORS.reduce((s, g) => s + state.owned[g.id], 0);
+
+// temporary boosts and the skin collection
+const buffActive = () => Date.now() < state.buffUntil;
+const buffMult = () => buffActive() ? state.buffMult : 1;
+const collMult = () => 1 + SKINS.filter(s => !s.default && state.skins[s.id]).reduce((a, s) => a + RARITIES[s.rarity].coll, 0) *
+  (1 + 0.2 * rk("t2b")) * (tal("t5") ? 2 : 1);
+
+// frenzy (active ability)
+const frenzyPower = () => 7 + 2 * rk("c3b");
+const frenzyDur = () => 20 + 5 * rk("c3b");
+const frenzyCd = () => 120 - 15 * rk("c3b");
+const frenzyAvail = () => upgOn("frenzy") || tal("c3b");
+const frenzyActive = () => Date.now() < state.frenzyUntil;
+const frenzyMult = () => frenzyActive() ? frenzyPower() : 1;
+
+// generators
+const cost = g => Math.floor(g.baseCost * Math.pow(COST_GROWTH - 0.003 * rk("w4a"), state.owned[g.id]) * Math.pow(0.95, puLevel("discount")) *
+  Math.pow(0.97, rk("w1")) * (tal("w5") ? 0.85 : 1));
+const genCps = g => g.baseCps * state.owned[g.id] * milestoneMult(state.owned[g.id]) *
+  ((tal("w3a") && (g.id === "cursor" || g.id === "miner")) ? 2 : 1) *
+  ((tal("w3b") && (g.id === "factory" || g.id === "portal")) ? 2 : 1);
+const prodMult = () => (1 + 0.10 * rk("w2a") + 0.003 * rk("w2b") * totalGens() + 0.02 * rk("w4b") * Math.min(state.ascensions, 50)) *
+  (tal("w5") ? 3 : 1) * (upgOn("overclock") ? 1.5 : 1) * (1 + 0.25 * puLevel("synergy"));
+const genIncome = g => genCps(g) * globalMult() * prodMult() * frenzyMult();
+
+// clicking
+const comboMax = () => 2 + rk("c2b");
+const comboMult = () => upgOn("combo") ? 1 + combo : 1;
+const critChance = () => 0.03 * rk("c2a") + (upgOn("lucky") ? 0.10 : 0);
+const critMult = () => (tal("c5") ? 25 : 10) + 5 * rk("c4a");
+const clickBase = () => state.clickPower * (1 + puLevel("touch")) * (1 + 0.4 * rk("c1")) * (upgOn("sharper") ? 2 : 1) * globalMult() * frenzyMult();
+const autoEff = () => (upgOn("auto") ? 0.5 : 0) + 0.2 * rk("c3a");
+const autoIncome = () => autoEff() * 4 * clickBase();
+const cps = () => GENERATORS.reduce((s, g) => s + genIncome(g), 0) + autoIncome();
+const clickShare = () => 0.05 * rk("c4b") + (tal("c5") ? 0.25 : 0);   // part of coins/sec added to every click
+const clickValue = () => clickBase() * comboMult() + clickShare() * cps();
+
+// golden coins and casino
+const goldenRate = () => 1 / (1 + 0.1 * rk("f1")) * (tal("f5") ? 0.5 : 1) * (upgOn("magnet") ? 0.5 : 1);
+const goldenLife = () => (1 + 0.2 * rk("f1")) * (upgOn("magnet") ? 1.5 : 1);
+const goldenMult = () => (1 + 0.5 * rk("f2b")) * (tal("f5") ? 3 : 1);
+const casinoMult = () => (1 + 0.15 * rk("f3a")) * (tal("f5") ? 2 : 1);
+const ticketMax = () => TICKET_BASE_MAX + 2 * rk("f3a");
+const ticketSeconds = () => TICKET_BASE_SECONDS / (1 + 0.2 * rk("f2a"));
+
+// talent points: lifetime coins (log scale), ascensions, transcensions, achievements, rare drops
+const tpFromCoins = () => Math.max(0, Math.floor(3 * Math.log10(state.lifetimeEarned / 300)));
+const tpAch = () => ACHIEVEMENTS.reduce((s, a) => s + (state.ach[a.id] ? a.tp : 0), 0);
+const tpEarned = () => tpFromCoins() + 2 * state.ascensions + 5 * state.transcensions + tpAch() + state.bonusTP;
+const tpSpent = () => TALENTS.reduce((s, t) => s + t.cost * rk(t.id), 0);
+const tpFree = () => tpEarned() - tpSpent();
+const nextCoinTPAt = () => 300 * Math.pow(10, (tpFromCoins() + 1) / 3);
+const upCost = (u, level) => Math.ceil(u.baseCost * Math.pow(u.growth, level));
+
+const ppBoost = () => 1 + 0.25 * suLevel("ppboost") + 0.1 * rk("f3b") + (tal("ascend") ? 0.5 : 0);
+const ppGain = () => Math.floor(Math.sqrt(state.runEarned / PP_DIVISOR) * ppBoost());
+const coinsForNextPP = () => Math.pow((ppGain() + 1) / ppBoost(), 2) * PP_DIVISOR;
+const sdGain = () => Math.floor(Math.sqrt(state.ppRun / SD_DIVISOR));
+const ppForNextSD = () => Math.pow(sdGain() + 1, 2) * SD_DIVISOR;
+
+function fmt(n) {
+  if (n < 1000) return n.toFixed(n < 10 ? 1 : 0);
+  const suffixes = ["K", "M", "B", "T", "Qa", "Qi"];
+  const exp = Math.min(Math.floor(Math.log10(n) / 3), suffixes.length);
+  return (n / Math.pow(1000, exp)).toFixed(2) + suffixes[exp - 1];
+}
+
+// ---------- 4. EFFECTS (visuals) ----------
+const $ = id => document.getElementById(id);
+
+function floatText(x, y, text, crit) {
+  if (REDUCED_MOTION) return;
+  const el = document.createElement("div");
+  el.className = "float" + (crit ? " crit" : "");
+  el.textContent = text;
+  el.style.left = x + "px"; el.style.top = y + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+
+function burst(x, y, colors, n) {
+  if (REDUCED_MOTION) return;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement("i");
+    p.className = "spark";
+    const a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 190;
+    p.style.left = x + "px"; p.style.top = y + "px";
+    p.style.background = colors[i % colors.length];
+    p.style.setProperty("--dx", Math.cos(a) * d + "px");
+    p.style.setProperty("--dy", Math.sin(a) * d + "px");
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 950);
+  }
+}
+
+function flash(color) {
+  const f = $("flash");
+  f.style.background = color;
+  f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+function popRow(el) { el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+
+// little coins drift up from the big coin while you have passive income
+setInterval(() => {
+  if (REDUCED_MOTION || cps() <= 0 || document.hidden) return;
+  const r = $("clicker").getBoundingClientRect();
+  const el = document.createElement("div");
+  el.className = "rise";
+  el.textContent = currentSkin().emoji;
+  el.style.left = (r.left + 20 + Math.random() * (r.width - 40)) + "px";
+  el.style.top = (r.top + r.height * 0.3) + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}, 700);
+
+// starfield background (gets denser with every stardust)
+const cv = $("stars"), ctx = cv.getContext("2d");
+let stars = [], starsFor = -1;
+function resizeStars() { cv.width = innerWidth; cv.height = innerHeight; starsFor = -1; }
+function initStars() {
+  starsFor = state.sdTotal;
+  const n = Math.min(60 + state.sdTotal * 8, 300);
+  stars = Array.from({ length: n }, () => ({
+    x: Math.random() * cv.width, y: Math.random() * cv.height,
+    r: Math.random() * 1.6 + 0.3, s: Math.random() * 0.15 + 0.02, p: Math.random() * 6.28,
+  }));
+}
+function drawStars(t) {
+  if (starsFor !== state.sdTotal) initStars();
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.fillStyle = "#fff";
+  for (const s of stars) {
+    if (!REDUCED_MOTION) { s.y += s.s; if (s.y > cv.height) { s.y = 0; s.x = Math.random() * cv.width; } }
+    ctx.globalAlpha = 0.35 + 0.65 * Math.abs(Math.sin(t / 1000 + s.p));
+    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  if (!REDUCED_MOTION) requestAnimationFrame(drawStars);
+}
+window.addEventListener("resize", resizeStars);
+
+// ---------- 5. ACTIONS ----------
+function earn(amount) {
+  state.coins += amount;
+  state.runEarned += amount;
+  state.lifetimeEarned += amount;
+}
+
+function clickCoin(e) {
+  let v = clickValue();
+  const crit = Math.random() < critChance();
+  if (crit) v *= critMult();
+  earn(v);
+  state.clicks++; if (crit) state.crits++;
+  if (upgOn("combo")) { combo = Math.min(comboMax(), combo + 0.1); if (combo >= comboMax() - 0.001) state.comboMaxed = 1; }
+  lastClickAt = Date.now();
+  let x = e.clientX, y = e.clientY;
+  if (!x && !y) { const r = $("clicker").getBoundingClientRect(); x = r.left + r.width / 2; y = r.top; }
+  floatText(x, y - 10, (crit ? "CRIT! " : "") + "+" + fmt(v), crit);
+  if (crit) burst(x, y, ["#ff5fa8", "#ffd84a", "#ffffff"], 10);
+  const c = $("coins");
+  c.classList.add("bump"); setTimeout(() => c.classList.remove("bump"), 80);
+}
+
+function buy(id) {
+  const g = GENERATORS.find(x => x.id === id);
+  const price = cost(g);
+  if (state.coins >= price) {
+    state.coins -= price; state.owned[id]++;
+    popRow($("row-" + id));
+  }
+}
+
+function buyUpgrade(list, levels, currency, id, prefix) {
+  const u = list.find(x => x.id === id);
+  const lvl = levels[id] || 0;
+  if (lvl >= u.max) return;
+  const price = upCost(u, lvl);
+  if (state[currency] >= price) {
+    state[currency] -= price; levels[id] = lvl + 1;
+    popRow($(prefix + "row-" + id));
+  }
+}
+
+function ascend() {
+  const gain = ppGain();
+  if (gain < 1) return;
+  if (!confirm(`Ascend now? You'll reset coins and generators but gain ${gain} prestige point${gain > 1 ? "s" : ""}.`)) return;
+  state.pp += gain; state.ppTotal += gain; state.ppRun += gain; state.ascensions++;
+  state.coins = 500 * puLevel("head");
+  state.runEarned = 0;
+  state.upg = freshUpg(); combo = 0;
+  state.owned = Object.fromEntries(GENERATORS.map(g => [g.id, 0]));
+  burst(innerWidth / 2, innerHeight / 2, ["#ffd84a", "#ffb300", "#fff3a0", "#ff9a3c"], 45);
+  flash("radial-gradient(circle, #ffe27a, transparent 70%)");
+  toast(`Ascended! +${gain} PP`);
+}
+
+function transcend() {
+  const gain = sdGain();
+  if (gain < 1) return;
+  if (!confirm(`Transcend now? This resets coins, generators, ALL prestige points and prestige upgrades, but gives ${gain} stardust (permanent).`)) return;
+  state.sd += gain; state.sdTotal += gain; state.transcensions++;
+  state.coins = 0; state.runEarned = 0;
+  state.upg = freshUpg(); combo = 0;
+  state.owned = Object.fromEntries(GENERATORS.map(g => [g.id, 0]));
+  state.pp = 5 * suLevel("residual");
+  state.ppTotal = 0; state.ppRun = 0;
+  state.pu = Object.fromEntries(PRESTIGE_UPGRADES.map(u => [u.id, 0]));
+  burst(innerWidth / 2, innerHeight / 2, ["#b07eff", "#ff7ad9", "#7ad7ff", "#ffffff"], 90);
+  flash("radial-gradient(circle, #c9a8ff, #3b1b7a 80%)");
+  toast(`Transcended! +${gain} stardust`);
+}
+
+function autoBuy() {
+  if (!suLevel("auto")) return;
+  GENERATORS.forEach(g => { if (state.coins >= cost(g)) buy(g.id); });
+}
+
+// ---------- 6. GOLDEN COIN ----------
+const golden = $("golden");
+function scheduleGolden() { setTimeout(spawnGolden, (45 + Math.random() * 45) * 1000 * goldenRate()); }
+function spawnGolden() {
+  golden.style.left = (10 + Math.random() * 75) + "vw";
+  golden.style.top = (15 + Math.random() * 65) + "vh";
+  golden.style.display = "block";
+  setTimeout(() => { golden.style.display = "none"; scheduleGolden(); }, 12000 * goldenLife());
+}
+golden.onclick = e => {
+  const bonus = Math.max(cps() * 60, clickValue() * 20) * goldenMult();
+  earn(bonus);
+  state.goldens++;
+  if (Math.random() < 0.1 * rk("f4a")) { addBuff(5, 15); toast("Golden Frenzy! x5 production for 15s"); }
+  golden.style.display = "none";
+  burst(e.clientX, e.clientY, ["#ffd84a", "#fff3a0", "#ffb300"], 28);
+  toast(`Golden coin! +${fmt(bonus)} coins`);
+};
+
+// ---------- CASINO ----------
+// Plays cost tickets, never coins, so gambling can only help. Wins pay in "bonus units".
+const bonusUnit = () => Math.max(cps() * 20, clickValue() * 10);
+
+function payWin(mult) {
+  const win = mult * bonusUnit() * casinoMult();
+  if (win > 0) { earn(win); state.casinoWon += win; }
+  return win;
+}
+
+function unlockGame(id) {
+  const g = CASINO_GAMES.find(x => x.id === id);
+  if (state.casino[id] || state.coins < g.cost) return;
+  state.coins -= g.cost;
+  state.casino[id] = true;
+  const r = $("game-" + id).getBoundingClientRect();
+  burst(r.left + r.width / 2, r.top + r.height / 2, ["#fb7185", "#fbbf24", "#ffffff"], 35);
+  toast(g.name + " unlocked!");
+}
+
+// --- slots ---
+const SLOTS = [
+  { s: "\u{1F352}", w: 30, pay: 3 },
+  { s: "\u{1F34B}", w: 25, pay: 5 },
+  { s: "\u{1F514}", w: 20, pay: 10 },
+  { s: "\u{1F48E}", w: 15, pay: 25 },
+  { s: "7\uFE0F\u20E3", w: 10, pay: 100 },
+];
+let spinning = false;
+
+function pickSlot() {
+  let r = Math.random() * 100;
+  for (const s of SLOTS) { r -= s.w; if (r < 0) return s; }
+  return SLOTS[0];
+}
+
+function spinSlots() {
+  if (spinning || !state.casino.slots) return;
+  if (state.tickets < 1) { toast("No tickets left"); return; }
+  state.tickets -= 1;
+  spinning = true;
+  $("slots-msg").textContent = "Spinning...";
+  const result = [pickSlot(), pickSlot(), pickSlot()];
+  const reels = [0, 1, 2].map(i => $("reel" + i));
+  reels.forEach(r => { r.classList.remove("win"); r.classList.add("spin"); });
+  const timers = reels.map(r => setInterval(() => {
+    r.textContent = SLOTS[Math.floor(Math.random() * SLOTS.length)].s;
+  }, 70));
+  const stopAt = REDUCED_MOTION ? [0, 0, 0] : [700, 1150, 1600];
+  reels.forEach((r, i) => setTimeout(() => {
+    clearInterval(timers[i]);
+    r.classList.remove("spin");
+    r.textContent = result[i].s;
+    if (i === 2) finishSlots(result);
+  }, stopAt[i]));
+}
+
+function finishSlots(res) {
+  spinning = false;
+  const [a, b, c] = res;
+  const triple = a === b && b === c;
+  const pair = a === b || b === c || a === c;
+  const mult = triple ? a.pay : pair ? 0.5 : 0;
+  const won = payWin(mult);
+  if (mult > 0) {
+    [0, 1, 2].forEach(i => $("reel" + i).classList.add("win"));
+    $("slots-msg").textContent = (triple ? (mult >= 25 ? "JACKPOT! " : "Triple! ") : "Pair! ") + "+" + fmt(won) + " coins";
+    if (mult >= 10) {
+      const r = $("slots-play").getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + 60, ["#fbbf24", "#fb7185", "#ffffff"], 50);
+      toast("Slots win! +" + fmt(won) + " coins");
+    }
+  } else {
+    $("slots-msg").textContent = "No luck. Try again.";
+  }
+}
+
+// --- blackjack ---
+const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+const SUITS = ["\u2660", "\u2665", "\u2666", "\u2663"];
+let bj = null;
+
+function newDeck() {
+  const d = [];
+  for (const s of SUITS) for (const r of RANKS) d.push({ r, s });
+  for (let i = d.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [d[i], d[j]] = [d[j], d[i]];
+  }
+  return d;
+}
+const cardVal = c => c.r === "A" ? 11 : (c.r === "10" || c.r === "J" || c.r === "Q" || c.r === "K") ? 10 : Number(c.r);
+function handTotal(h) {
+  let t = h.reduce((s, c) => s + cardVal(c), 0), aces = h.filter(c => c.r === "A").length;
+  while (t > 21 && aces > 0) { t -= 10; aces--; }
+  return t;
+}
+const isNatural = h => h.length === 2 && handTotal(h) === 21;
+
+function bjDeal() {
+  if (!state.casino.blackjack || (bj && !bj.done)) return;
+  if (state.tickets < 1) { toast("No tickets left"); return; }
+  state.tickets -= 1;
+  bj = { deck: newDeck(), player: [], dealer: [], done: false, msg: "" };
+  bj.player.push(bj.deck.pop()); bj.dealer.push(bj.deck.pop());
+  bj.player.push(bj.deck.pop()); bj.dealer.push(bj.deck.pop());
+  if (isNatural(bj.player) || isNatural(bj.dealer)) bjFinish();
+  else { bj.msg = "Hit or stand?"; renderBj(); }
+}
+
+function bjHit() {
+  if (!bj || bj.done) return;
+  bj.player.push(bj.deck.pop());
+  const t = handTotal(bj.player);
+  if (t > 21) bjFinish();
+  else if (t === 21) bjStand();
+  else renderBj();
+}
+
+function bjStand() {
+  if (!bj || bj.done) return;
+  while (handTotal(bj.dealer) < 17) bj.dealer.push(bj.deck.pop());
+  bjFinish();
+}
+
+function bjFinish() {
+  bj.done = true;
+  const p = handTotal(bj.player), d = handTotal(bj.dealer);
+  const pn = isNatural(bj.player), dn = isNatural(bj.dealer);
+  let mult = 0, msg;
+  if (p > 21) msg = "Bust! You lose.";
+  else if (pn && dn) { mult = 0.5; msg = "Both have blackjack: push."; }
+  else if (pn) { mult = 2.25; msg = "Blackjack!"; }
+  else if (dn) msg = "Dealer has blackjack.";
+  else if (d > 21) { mult = 1.5; msg = "Dealer busts! You win."; }
+  else if (p > d) { mult = 1.5; msg = "You win!"; }
+  else if (p === d) { mult = 0.5; msg = "Push."; }
+  else msg = "Dealer wins.";
+  const won = payWin(mult);
+  bj.msg = won > 0 ? msg + " +" + fmt(won) + " coins" : msg + " No bonus this time.";
+  if (mult >= 1.5) {
+    const r = $("blackjack-play").getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + 80, ["#fbbf24", "#fb7185", "#ffffff"], 30);
+  }
+  renderBj();
+}
+
+function renderBj() {
+  if (!bj) {
+    $("bj-player").innerHTML = ""; $("bj-dealer").innerHTML = "";
+    $("bj-ptotal").textContent = ""; $("bj-dtotal").textContent = "";
+    $("bj-msg").textContent = "Press Deal to play (1 ticket).";
+    return;
+  }
+  const mk = (c, isNew) => '<span class="pcard' + ((c.s === SUITS[1] || c.s === SUITS[2]) ? " red" : "") + (isNew ? " new" : "") + '">' + c.r + c.s + "</span>";
+  $("bj-player").innerHTML = bj.player.map((c, i) => mk(c, i >= (bj.pShown || 0))).join("");
+  bj.pShown = bj.player.length;
+  $("bj-ptotal").textContent = "(" + handTotal(bj.player) + ")";
+  if (!bj.done) {
+    $("bj-dealer").innerHTML = mk(bj.dealer[0], !bj.dShown) + '<span class="pcard back">?</span>';
+    bj.dShown = 1;
+    $("bj-dtotal").textContent = "";
+  } else {
+    $("bj-dealer").innerHTML = bj.dealer.map((c, i) => mk(c, i >= (bj.dShown || 0))).join("");
+    bj.dShown = bj.dealer.length;
+    $("bj-dtotal").textContent = "(" + handTotal(bj.dealer) + ")";
+  }
+  $("bj-msg").textContent = bj.msg;
+}
+
+function buildCasino() {
+  CASINO_GAMES.forEach(g => { $(g.id + "-unlock").onclick = () => unlockGame(g.id); });
+  [0, 1, 2].forEach(i => { $("reel" + i).textContent = SLOTS[i].s; });
+  $("slots-spin").onclick = spinSlots;
+  $("bj-deal").onclick = bjDeal;
+  $("bj-hit").onclick = bjHit;
+  $("bj-stand").onclick = bjStand;
+  renderBj();
+}
+
+function renderCasino() {
+  const t = state.tickets;
+  $("tickets").textContent = "Tickets: " + Math.floor(t) + "/" + ticketMax() +
+    (t >= ticketMax() ? " (full)" : " | next in " + Math.ceil((1 - (t % 1)) * ticketSeconds()) + "s") +
+    " | Bonus unit: " + fmt(bonusUnit()) + " coins | Casino winnings: " + fmt(state.casinoWon);
+  $("ticket-bar").style.width = (t / ticketMax() * 100) + "%";
+  CASINO_GAMES.forEach(g => {
+    const on = state.casino[g.id];
+    $(g.id + "-locked").style.display = on ? "none" : "flex";
+    $(g.id + "-play").style.display = on ? "block" : "none";
+    const b = $(g.id + "-unlock");
+    b.textContent = "Unlock: " + fmt(g.cost);
+    b.disabled = state.coins < g.cost;
+  });
+  $("slots-spin").disabled = spinning || t < 1;
+  const live = !!(bj && !bj.done);
+  $("bj-deal").disabled = live || t < 1;
+  $("bj-hit").disabled = !live;
+  $("bj-stand").disabled = !live;
+}
+
+// ---------- 7. GAME LOOP ----------
+function tick() {
+  const now = Date.now();
+  const dt = (now - state.lastTick) / 1000;
+  state.lastTick = now;
+  earn(cps() * dt);
+  if (state.tickets < ticketMax()) state.tickets = Math.min(ticketMax(), state.tickets + dt / ticketSeconds());
+  if (now - lastClickAt > 1200) combo = Math.max(0, combo - dt * (1.5 - 0.3 * rk("c2b")));
+  if (rk("t3b") > 0) state.freeCases = Math.min(3, state.freeCases + dt / freeCaseSecs());
+  checkTalentPoints(checkAchievements());
+  autoBuy();
+  render();
+}
+
+// ---------- 8. UI ----------
+GENERATORS.forEach(g => {
+  const row = document.createElement("div");
+  row.className = "row"; row.id = "row-" + g.id;
+  row.style.setProperty("--c", g.color);
+  row.innerHTML = `<div class="info">
+      <div class="top"><span class="icon">${g.icon}</span><strong>${g.name}</strong> <span id="own-${g.id}" class="muted"></span></div>
+      <small id="info-${g.id}"></small>
+      <div class="bar"><i id="bar-${g.id}"></i></div>
+      <div class="units" id="units-${g.id}"></div>
+    </div>
+    <button id="buy-${g.id}"></button>`;
+  $("shop").appendChild(row);
+  row.querySelector("button").onclick = () => buy(g.id);
+});
+
+function buildUpgradeShop(list, parent, prefix, onBuy) {
+  list.forEach(u => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = prefix + "row-" + u.id;
+    row.innerHTML = `<div class="info">
+        <div class="top"><strong>${u.name}</strong> <span id="${prefix}lvl-${u.id}" class="muted"></span></div>
+        <small>${u.desc}</small>
+        <div class="bar"><i id="${prefix}bar-${u.id}"></i></div>
+      </div>
+      <button id="${prefix}buy-${u.id}"></button>`;
+    parent.appendChild(row);
+    row.querySelector("button").onclick = () => onBuy(u.id);
+  });
+}
+function updateUpgradeShop(list, prefix, levels, balance, unit) {
+  list.forEach(u => {
+    const lvl = levels[u.id] || 0, maxed = lvl >= u.max;
+    $(prefix + "lvl-" + u.id).textContent = `Lv ${lvl}/${u.max}`;
+    $(prefix + "bar-" + u.id).style.width = (lvl / u.max * 100) + "%";
+    const btn = $(prefix + "buy-" + u.id);
+    btn.textContent = maxed ? "MAX" : `${upCost(u, lvl)} ${unit}`;
+    btn.disabled = maxed || balance < upCost(u, lvl);
+  });
+}
+buildUpgradeShop(PRESTIGE_UPGRADES, $("pshop"), "p", id => buyUpgrade(PRESTIGE_UPGRADES, state.pu, "pp", id, "p"));
+buildUpgradeShop(STARDUST_UPGRADES, $("sshop"), "s", id => buyUpgrade(STARDUST_UPGRADES, state.su, "sd", id, "s"));
+document.querySelectorAll("#pshop .row").forEach(r => r.style.setProperty("--c", "#d4a017"));
+document.querySelectorAll("#sshop .row").forEach(r => r.style.setProperty("--c", "#8a5cf5"));
+
+// show one icon per generator owned (up to 24), only adding new ones when you buy
+function renderUnits(g) {
+  const n = state.owned[g.id], el = $("units-" + g.id), shown = Math.min(n, 24);
+  if (el.dataset.n === String(n)) return;
+  el.dataset.n = n;
+  let cur = el.querySelectorAll("span").length;
+  if (shown < cur) { el.innerHTML = ""; cur = 0; }
+  let em = el.querySelector("em");
+  for (let i = cur; i < shown; i++) {
+    const s = document.createElement("span");
+    s.textContent = g.icon;
+    el.insertBefore(s, em);
+  }
+  em = el.querySelector("em");
+  if (n > shown) {
+    if (!em) { em = document.createElement("em"); el.appendChild(em); }
+    em.textContent = "+" + (n - shown);
+  } else if (em) em.remove();
+}
+
+function render() {
+  $("coins").textContent = fmt(state.coins) + " coins";
+  $("cps").textContent = `${fmt(cps())} / sec  |  x${globalMult().toFixed(2)} total bonus`;
+
+  GENERATORS.forEach(g => {
+    const n = state.owned[g.id];
+    const next = MILESTONES.find(m => m > n);
+    const prev = [...MILESTONES].reverse().find(m => m <= n) || 0;
+    $("own-" + g.id).textContent = "x" + n;
+    $("info-" + g.id).textContent = `${fmt(genIncome(g))}/sec total` +
+      (next ? ` | x2 at ${next}` : " | all milestones reached");
+    $("bar-" + g.id).style.width = (next ? (n - prev) / (next - prev) * 100 : 100) + "%";
+    renderUnits(g);
+    const btn = $("buy-" + g.id);
+    btn.textContent = "Buy: " + fmt(cost(g));
+    btn.disabled = state.coins < cost(g);
+    btn.style.setProperty("--c", g.color);
+  });
+
+  const gain = ppGain();
+  $("ascend").disabled = gain < 1;
+  $("ascend").classList.toggle("ready", gain >= 1);
+  $("ascend").textContent = gain >= 1
+    ? `Ascend for +${gain} PP`
+    : `Ascend (earn ${fmt(coinsForNextPP())} coins this run for your next PP)`;
+  $("stats").textContent =
+    `Next PP at ${fmt(coinsForNextPP())} coins this run (${fmt(state.runEarned)} so far) | ` +
+    `Ascensions: ${state.ascensions} | Lifetime: ${fmt(state.lifetimeEarned)}`;
+  $("pp").textContent = `(${state.pp} PP, x${prestigeMult().toFixed(2)} bonus)`;
+  updateUpgradeShop(PRESTIGE_UPGRADES, "p", state.pu, state.pp, "PP");
+
+  const sgain = sdGain();
+  $("transcend").disabled = sgain < 1;
+  $("transcend").classList.toggle("ready", sgain >= 1);
+  $("transcend").textContent = sgain >= 1
+    ? `Transcend for +${sgain} Stardust`
+    : `Transcend (earn ${fmt(ppForNextSD())} PP total across ascensions for your next Stardust)`;
+  $("sstats").textContent =
+    `PP earned this transcension: ${fmt(state.ppRun)} | next Stardust at ${fmt(ppForNextSD())} | ` +
+    `Transcensions: ${state.transcensions}`;
+  $("sd").textContent = `(${state.sd} SD, x${stardustMult().toFixed(2)} bonus)`;
+  updateUpgradeShop(STARDUST_UPGRADES, "s", state.su, state.sd, "SD");
+  renderCasino();
+  renderUpgrades();
+  renderFrenzy();
+  renderTalents();
+  renderCases();
+  renderBuff();
+}
+
+// ---------- UPGRADES, FRENZY, TALENTS ----------
+function buildUpgrades() {
+  UPGRADES.forEach(u => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "urow-" + u.id;
+    row.style.setProperty("--c", "#38bdf8");
+    row.innerHTML = `<div class="info">
+        <div class="top"><span class="icon">${u.icon}</span><strong>${u.name}</strong></div>
+        <small>${u.desc}</small></div>
+      <button id="ubuy-${u.id}"></button>`;
+    $("ushop").appendChild(row);
+    row.querySelector("button").onclick = () => buyUpg(u.id);
+  });
+}
+function buyUpg(id) {
+  const u = UPGRADES.find(x => x.id === id);
+  if (state.upg[id] || state.coins < u.cost) return;
+  state.coins -= u.cost;
+  state.upg[id] = true;
+  popRow($("urow-" + id));
+  toast(u.name + " unlocked!");
+}
+function renderUpgrades() {
+  UPGRADES.forEach(u => {
+    const own = state.upg[u.id];
+    const b = $("ubuy-" + u.id);
+    b.textContent = own ? "Owned" : "Buy: " + fmt(u.cost);
+    b.disabled = own || state.coins < u.cost;
+    $("urow-" + u.id).classList.toggle("owned", own);
+  });
+}
+
+function activateFrenzy() {
+  const now = Date.now();
+  if (!frenzyAvail() || frenzyActive() || now < state.frenzyReadyAt) return;
+  state.frenzyUntil = now + frenzyDur() * 1000;
+  state.frenzyReadyAt = now + frenzyCd() * 1000;
+  state.frenzies++;
+  burst(innerWidth / 2, innerHeight / 2, ["#f97316", "#fde047", "#ef4444"], 40);
+  flash("radial-gradient(circle, rgba(255,140,0,.8), transparent 70%)");
+  toast("FRENZY! x" + frenzyPower() + " for " + frenzyDur() + "s");
+}
+function renderFrenzy() {
+  document.body.classList.toggle("frenzy", frenzyActive());
+  $("combo-wrap").style.display = upgOn("combo") ? "block" : "none";
+  $("combo-x").textContent = (1 + combo).toFixed(1);
+  $("combo-bar").style.width = (combo / comboMax() * 100) + "%";
+  const b = $("frenzy");
+  if (!frenzyAvail()) { b.style.display = "none"; return; }
+  b.style.display = "block";
+  const now = Date.now();
+  if (frenzyActive()) {
+    b.disabled = true; b.classList.remove("ready");
+    b.textContent = "FRENZY! x" + frenzyPower() + " for " + Math.ceil((state.frenzyUntil - now) / 1000) + "s";
+  } else if (now < state.frenzyReadyAt) {
+    b.disabled = true; b.classList.remove("ready");
+    b.textContent = "Frenzy recharging: " + Math.ceil((state.frenzyReadyAt - now) / 1000) + "s";
+  } else {
+    b.disabled = false; b.classList.add("ready");
+    b.textContent = "Activate Frenzy (x" + frenzyPower() + " for " + frenzyDur() + "s)";
+  }
+}
+
+// --- talent tree ---
+const tColor = t => t.branch === 4 ? GRAND_COLOR : BRANCHES[t.branch].color;
+const reqMet = t => t.req.every(p => rk(p) >= (t.rr || 1));
+
+function checkAchievements() {
+  const got = [];
+  ACHIEVEMENTS.forEach(a => {
+    if (!state.ach[a.id] && a.cur() >= a.goal) { state.ach[a.id] = true; got.push(a); }
+  });
+  return got;
+}
+
+function checkTalentPoints(got) {
+  got = got || [];
+  const e = tpEarned();
+  let msg = got.length ? "Achievement: " + got.map(a => a.name).join(", ") + "! " : "";
+  if (e > state.tpSeen) {
+    const n = e - state.tpSeen;
+    state.tpSeen = e;
+    toast(msg + "+" + n + " talent point" + (n > 1 ? "s" : "") + " (see Talent Tree)");
+    burst(innerWidth / 2, 70, ["#fbbf24", "#ffffff", "#7ad7ff"], 24);
+  } else if (got.length) toast(msg);
+}
+
+function buildTalents() {
+  const tree = $("tree");
+  BRANCHES.forEach((b, i) => {
+    const hd = document.createElement("div");
+    hd.className = "branch-title";
+    hd.style.setProperty("--c", b.color);
+    hd.style.gridColumn = (2 * i + 1) + " / span 2";
+    hd.style.gridRow = "1";
+    hd.textContent = b.icon + " " + b.name;
+    tree.appendChild(hd);
+  });
+  TALENTS.forEach(t => {
+    const n = document.createElement("button");
+    n.id = "tn-" + t.id;
+    n.style.setProperty("--c", tColor(t));
+    if (t.branch === 4) {
+      n.style.gridColumn = "1 / -1"; n.style.justifySelf = "center"; n.style.width = "min(360px, 100%)";
+    } else if (t.col === undefined) {
+      n.style.gridColumn = (2 * t.branch + 1) + " / span 2"; n.style.justifySelf = "center"; n.style.width = "82%";
+    } else {
+      n.style.gridColumn = String(2 * t.branch + 1 + t.col);
+    }
+    n.style.gridRow = String(t.row + 1);
+    n.innerHTML = (t.tag ? `<span class="tag">${t.tag}</span>` : "") +
+      `<span class="ni">${t.icon}</span><strong>${t.name}</strong><small>${t.desc}</small>` +
+      `<span class="rank" id="tr-${t.id}"></span><span class="cost" id="tc-${t.id}"></span>`;
+    n.onclick = () => buyTalent(t.id);
+    tree.appendChild(n);
+  });
+}
+
+function buyTalent(id) {
+  const t = TALENTS.find(x => x.id === id);
+  const r = rk(id);
+  if (r >= t.max) return;
+  if (!reqMet(t)) { toast("Put " + (t.rr || 1) + " rank" + ((t.rr || 1) > 1 ? "s" : "") + " in each talent above it first"); return; }
+  if (tpFree() < t.cost) { toast("Not enough talent points"); return; }
+  state.talents[id] = r + 1;
+  const b = $("tn-" + id).getBoundingClientRect();
+  const big = !!t.tag;
+  burst(b.left + b.width / 2, b.top + b.height / 2, [tColor(t), "#ffffff", "#ffd84a"], big ? 70 : 20);
+  if (big) { flash("radial-gradient(circle, " + tColor(t) + ", transparent 70%)"); toast(t.name + " unlocked!"); }
+  renderTalents(true);
+  drawTreeLines();
+}
+
+function respec() {
+  if (!confirm("Refund every talent point so you can spend them again?")) return;
+  state.talents = freshTal();
+  renderTalents(true);
+  drawTreeLines();
+  toast("Talents refunded");
+}
+
+function buildAchievements() {
+  ACHIEVEMENTS.forEach(a => {
+    const row = document.createElement("div");
+    row.className = "row ach"; row.id = "ach-" + a.id;
+    row.innerHTML = `<div class="info"><div class="top"><strong>${a.name}</strong> <span class="muted" id="achp-${a.id}"></span></div>
+      <small>${a.desc}</small></div><span class="reward">+${a.tp} TP</span>`;
+    $("ach-list").appendChild(row);
+  });
+}
+
+function renderAchievements() {
+  let done = 0;
+  ACHIEVEMENTS.forEach(a => {
+    const ok = !!state.ach[a.id];
+    if (ok) done++;
+    $("ach-" + a.id).classList.toggle("done", ok);
+    $("achp-" + a.id).textContent = ok ? "Done" : fmtInt(Math.min(a.cur(), a.goal)) + "/" + fmtInt(a.goal);
+  });
+  $("ach-sum").textContent = "(" + done + "/" + ACHIEVEMENTS.length + " done, +" + tpAch() + " TP earned)";
+}
+
+function renderTalents(force) {
+  const free = tpFree();
+  const badge = $("tp-badge");
+  badge.style.display = free > 0 ? "inline-block" : "none";
+  badge.textContent = free;
+  if (!force && $("page-talents").style.display === "none") return;
+  $("tp-info").textContent = "Talent Points: " + free + " available (" + tpEarned() + " earned, " + tpSpent() + " spent)";
+  $("tp-next").textContent = "Next coin-milestone point at " + fmt(nextCoinTPAt()) + " lifetime coins (you have " + fmt(state.lifetimeEarned) + ").";
+  $("tp-break").textContent = "Sources: coins " + tpFromCoins() + " | ascensions " + (2 * state.ascensions) + " | transcensions " +
+    (5 * state.transcensions) + " | achievements " + tpAch() + " | drops " + state.bonusTP;
+  const life = state.lifetimeEarned;
+  let frac;
+  if (life < 300) frac = life / 646;
+  else { const x = 3 * Math.log10(life / 300); frac = x - Math.floor(x); }
+  $("tp-bar").style.width = (Math.max(0, Math.min(1, frac)) * 100) + "%";
+  TALENTS.forEach(t => {
+    const r = rk(t.id), maxed = r >= t.max, met = reqMet(t);
+    const avail = !maxed && met && free >= t.cost;
+    $("tr-" + t.id).textContent = t.max > 1 ? "Rank " + r + "/" + t.max : (r ? "Unlocked" : "");
+    $("tc-" + t.id).textContent = maxed ? "MAX" : t.cost + " TP";
+    $("tn-" + t.id).className = "node" + (t.tag ? " cap" : "") + (r > 0 ? " owned" : "") + (maxed ? " maxed" : "") +
+      (r === 0 && !met ? " locked" : "") + (avail ? " avail" : "");
+  });
+  renderAchievements();
+}
+
+function drawTreeLines() {
+  const wrap = $("tree"), svg = $("tree-lines");
+  if ($("page-talents").style.display === "none") return;
+  const wr = wrap.getBoundingClientRect();
+  svg.setAttribute("width", wrap.scrollWidth);
+  svg.setAttribute("height", wrap.scrollHeight);
+  let out = "";
+  TALENTS.forEach(t => t.req.forEach(pid => {
+    const a = $("tn-" + pid).getBoundingClientRect(), b = $("tn-" + t.id).getBoundingClientRect();
+    const x1 = a.left + a.width / 2 - wr.left, y1 = a.bottom - wr.top;
+    const x2 = b.left + b.width / 2 - wr.left, y2 = b.top - wr.top;
+    const my = (y1 + y2) / 2, on = rk(pid) >= (t.rr || 1);
+    out += '<path d="M' + x1 + " " + y1 + " C " + x1 + " " + my + ", " + x2 + " " + my + ", " + x2 + " " + y2 + '" fill="none" stroke="' +
+      (on ? tColor(t) : "rgba(255,255,255,0.18)") + '" stroke-width="' + (on ? 4 : 2) + '"' + (on ? ' stroke-linecap="round"' : "") + "/>";
+  }));
+  svg.innerHTML = out;
+}
+
+function showPage(page) {
+  ["game", "cases", "talents"].forEach(p => {
+    $("page-" + p).style.display = p === page ? "block" : "none";
+    $("tab-" + p).classList.toggle("active", p === page);
+  });
+  $("app").classList.toggle("wide", page === "talents");
+  if (page === "talents") { renderTalents(true); requestAnimationFrame(drawTreeLines); }
+  if (page === "cases") renderCases(true);
+}
+window.addEventListener("resize", drawTreeLines);
+
+// ---------- CASES, SKINS, BUFFS ----------
+const SPIN_MS = 5000, ITEM_W = 110, ITEM_GAP = 6, STEP = ITEM_W + ITEM_GAP, WIN_INDEX = 38, STRIP_LEN = 46;
+let opening = false, pending = null;
+const fmtInt = n => n >= 1000 ? fmt(n) : String(Math.floor(n));
+
+const currentSkin = () => SKINS.find(s => s.id === state.skin) || SKINS[0];
+const skinCount = () => SKINS.filter(s => !s.default && state.skins[s.id]).length;
+function applySkin() {
+  const s = currentSkin(), c = $("clicker");
+  c.textContent = s.emoji;
+  c.style.setProperty("--g1", s.g[0]); c.style.setProperty("--g2", s.g[1]); c.style.setProperty("--g3", s.g[2]);
+  c.style.setProperty("--glow", s.glow);
+}
+function equipSkin(id) {
+  if (!state.skins[id]) return;
+  state.skin = id; applySkin(); renderCases(true);
+}
+
+// price follows your income (without temporary boosts) so cases stay relevant
+const caseCost = t => {
+  const baseCps = cps() / (frenzyMult() * buffMult());
+  return Math.floor(Math.max(t.minCost, baseCps * t.secs) * (1 - 0.1 * rk("t1")) * (tal("t5") ? 0.75 : 1));
+};
+const bonusPower = () => 1 + 0.25 * rk("t4a");
+const dupPower = () => 1 + 0.5 * rk("t3a");
+const freeCaseSecs = () => [1, 900, 600, 360][rk("t3b")];
+
+function addBuff(mult, secs) {
+  const now = Date.now();
+  if (buffActive()) { state.buffMult = Math.max(state.buffMult, mult); state.buffUntil += secs * 1000; }
+  else { state.buffMult = mult; state.buffUntil = now + secs * 1000; }
+}
+
+function caseWeights(t) {
+  return t.weights.map((w, i) => {
+    let x = w;
+    if (i === 0) x *= 1 - 0.1 * rk("t2a");
+    if (i >= 2) x *= 1 + 0.15 * rk("t2a");
+    if (i === 4) x *= 1 + 0.5 * rk("t4b");
+    if (tal("ascend") && i < 2) x = 0;
+    return x;
+  });
+}
+function rollRarity(weights) {
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < weights.length; i++) { r -= weights[i]; if (r < 0) return i; }
+  return 0;
+}
+function pickItem(rarity) {
+  const type = Math.random() < 0.5 ? "skin" : "bonus";
+  const pool = ITEMS.filter(it => it.rarity === rarity && it.type === type);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+function oddsText(t) {
+  const w = caseWeights(t), total = w.reduce((a, b) => a + b, 0);
+  return w.map((x, i) => RARITIES[i].name + " " + (x / total * 100).toFixed(x / total < 0.1 ? 1 : 0) + "%").join(" | ");
+}
+const itemHtml = it => `<div class="ritem" style="--rc:${RARITIES[it.rarity].color}"><span class="ri">${it.icon}</span><span class="rn">${it.name}</span></div>`;
+
+function startRoulette(prize, t) {
+  const items = [];
+  for (let i = 0; i < STRIP_LEN; i++) items.push(i === WIN_INDEX ? prize : pickItem(rollRarity(t.weights)));
+  const strip = $("strip");
+  strip.innerHTML = items.map(itemHtml).join("");
+  const vw = $("roulette").clientWidth || 600;
+  const jitter = (Math.random() - 0.5) * (ITEM_W - 24);
+  const x = WIN_INDEX * STEP + ITEM_W / 2 + jitter - vw / 2;
+  strip.style.transition = "none";
+  strip.style.transform = "translateX(0px)";
+  void strip.offsetWidth;
+  strip.style.transition = REDUCED_MOTION ? "none" : "transform " + SPIN_MS + "ms cubic-bezier(.08,.6,.12,1)";
+  strip.style.transform = "translateX(" + (-x) + "px)";
+}
+
+function openCase(id, free) {
+  if (opening) return;
+  const t = CASE_TIERS.find(x => x.id === id);
+  if (free) {
+    if (state.freeCases < 1) return;
+    state.freeCases -= 1;
+  } else {
+    const c = caseCost(t);
+    if (state.coins < c) { toast("Not enough coins"); return; }
+    state.coins -= c;
+  }
+  opening = true;
+  const prize = pickItem(rollRarity(caseWeights(t)));
+  pending = { prize };
+  $("case-result").textContent = "Opening...";
+  startRoulette(prize, t);
+  setTimeout(resolvePending, REDUCED_MOTION ? 0 : SPIN_MS + 150);
+  renderCases(true);
+}
+
+function applyPrize(p) {
+  if (p.type === "skin") {
+    if (state.skins[p.id]) {
+      const c = RARITIES[p.rarity].dup * bonusUnit() * dupPower();
+      earn(c);
+      return "Duplicate! Converted to " + fmt(c) + " coins";
+    }
+    state.skins[p.id] = true;
+    return "New skin! +" + (RARITIES[p.rarity].coll * 100).toFixed(0) + "% coins from your collection";
+  }
+  if (p.kind === "coins") { const c = p.amount * bonusUnit() * bonusPower(); earn(c); return "+" + fmt(c) + " coins"; }
+  if (p.kind === "tickets") { state.tickets += p.amount; return "+" + p.amount + " casino tickets"; }
+  if (p.kind === "buff") { const s = p.secs * bonusPower(); addBuff(p.mult, s); return "x" + p.mult + " production for " + (Math.round(s / 6) / 10) + " min"; }
+  if (p.kind === "tp") { state.bonusTP += p.amount; return "+" + p.amount + " talent point" + (p.amount > 1 ? "s" : ""); }
+  return "";
+}
+
+function resolvePending() {
+  if (!pending) return;
+  const prize = pending.prize;
+  pending = null; opening = false;
+  const msg = applyPrize(prize);
+  state.casesOpened++;
+  if (prize.rarity === 4) state.legends++;
+  if (tal("t5")) state.tickets += 1;
+  state.recent.unshift({ id: prize.id, msg: msg });
+  state.recent = state.recent.slice(0, 8);
+  const R = RARITIES[prize.rarity];
+  $("case-result").innerHTML = `<span style="color:${R.color};font-weight:800">${R.name}</span> ${prize.icon} <strong>${prize.name}</strong>: ${msg}`;
+  const r = $("roulette").getBoundingClientRect();
+  burst(r.left + r.width / 2, r.top + r.height / 2, [R.color, "#ffffff"], 14 + prize.rarity * 18);
+  if (prize.rarity >= 3) flash("radial-gradient(circle, " + R.color + ", transparent 70%)");
+  renderCases(true);
+}
+// if the page closes mid-spin, still hand over the prize before saving
+window.addEventListener("beforeunload", () => { if (pending) resolvePending(); });
+
+function buildCases() {
+  CASE_TIERS.forEach(t => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "case-" + t.id;
+    row.style.setProperty("--c", t.color);
+    row.innerHTML = `<div class="info"><div class="top"><span class="icon">${t.icon}</span><strong>${t.name}</strong></div>
+        <small id="odds-${t.id}"></small></div>
+      <div class="btns2"><button id="open-${t.id}"></button>${t.id === "bronze" ? '<button id="open-free" style="--c:#34d399"></button>' : ""}</div>`;
+    $("case-list").appendChild(row);
+    $("open-" + t.id).onclick = () => openCase(t.id, false);
+  });
+  $("open-free").onclick = () => openCase("bronze", true);
+  SKINS.forEach(s => {
+    const el = document.createElement("div");
+    el.id = "skin-" + s.id;
+    el.innerHTML = `<span class="sem"></span><span class="snm"></span><small></small>`;
+    el.onclick = () => equipSkin(s.id);
+    $("skins").appendChild(el);
+  });
+  $("strip").innerHTML = Array.from({ length: 14 }, () => itemHtml(pickItem(rollRarity([40, 35, 19, 5, 1])))).join("");
+}
+
+function renderCases(force) {
+  if (!force && $("page-cases").style.display === "none") return;
+  $("cases-info").textContent = "Cases opened: " + state.casesOpened + " | Skins: " + skinCount() + "/" + (SKINS.length - 1) +
+    " | Case prices follow your income";
+  CASE_TIERS.forEach(t => {
+    $("odds-" + t.id).textContent = oddsText(t);
+    const b = $("open-" + t.id), c = caseCost(t);
+    b.textContent = "Open: " + fmt(c);
+    b.disabled = opening || state.coins < c;
+  });
+  const fb = $("open-free");
+  if (rk("t3b") > 0) {
+    fb.style.display = "block";
+    fb.textContent = "Free case (" + Math.floor(state.freeCases) + ")";
+    fb.disabled = opening || state.freeCases < 1;
+  } else fb.style.display = "none";
+  $("coll-info").textContent = "Collection bonus: x" + collMult().toFixed(2) + " coins. Click an owned skin to equip it. Duplicates pay coins.";
+  SKINS.forEach(s => {
+    const owned = !!state.skins[s.id], el = $("skin-" + s.id), R = RARITIES[s.rarity];
+    el.className = "skin" + (owned ? " owned" : " locked") + (state.skin === s.id ? " equipped" : "");
+    el.style.setProperty("--rc", R.color);
+    el.children[0].textContent = owned ? s.emoji : "❔";
+    el.children[1].textContent = owned ? s.name : "???";
+    el.children[2].textContent = s.default ? "Default" : R.name + " +" + (R.coll * 100).toFixed(0) + "%";
+  });
+  $("recent").innerHTML = state.recent.length ? state.recent.map(r => {
+    const it = ITEMS.find(x => x.id === r.id);
+    return it ? `<div><span style="color:${RARITIES[it.rarity].color};font-weight:700">${it.icon} ${it.name}</span> - ${r.msg}</div>` : "";
+  }).join("") : "Nothing yet. Open a case!";
+}
+
+function renderBuff() {
+  const el = $("buff");
+  if (!buffActive()) { el.style.display = "none"; return; }
+  el.style.display = "block";
+  const s = Math.ceil((state.buffUntil - Date.now()) / 1000);
+  el.textContent = "Boost x" + state.buffMult + " active: " + Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+// ---------- 9. SAVE / LOAD ----------
+function save() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {} }
+
+function load() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw), base = freshState();
+    state = { ...base, ...saved,
+      owned: { ...base.owned, ...saved.owned },
+      pu: { ...base.pu, ...saved.pu },
+      su: { ...base.su, ...saved.su },
+      casino: { ...base.casino, ...saved.casino },
+      upg: { ...base.upg, ...saved.upg },
+      talents: Object.fromEntries(TALENTS.map(t => [t.id, Math.min(t.max, Number(saved.talents && saved.talents[t.id]) || 0)])),
+      skins: { ...base.skins, ...saved.skins },
+      ach: { ...base.ach, ...saved.ach } };
+    const cap = (BASE_OFFLINE_HOURS + 2 * suLevel("timewarp") + 4 * rk("f4b") + (tal("ascend") ? 16 : 0)) * 3600;
+    const away = Math.min((Date.now() - state.lastTick) / 1000, cap);
+    earn(cps() * away);
+    if (state.tickets < ticketMax()) state.tickets = Math.min(ticketMax(), state.tickets + away / ticketSeconds());
+    state.lastTick = Date.now();
+  } catch (e) { state = freshState(); }
+}
+
+// ---------- 10. WIRE UP ----------
+$("clicker").onclick = clickCoin;
+$("frenzy").onclick = activateFrenzy;
+$("tab-game").onclick = () => showPage("game");
+$("tab-cases").onclick = () => showPage("cases");
+$("tab-talents").onclick = () => showPage("talents");
+$("respec").onclick = respec;
+$("ascend").onclick = ascend;
+$("transcend").onclick = transcend;
+$("save").onclick = () => { save(); toast("Saved"); };
+$("reset").onclick = () => {
+  if (confirm("Hard reset wipes EVERYTHING, including stardust. Sure?")) {
+    try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+    state = freshState();
+    combo = 0; opening = false; pending = null;
+    applySkin();
+    bj = null; renderBj();
+    document.querySelectorAll(".units").forEach(u => { u.innerHTML = ""; delete u.dataset.n; });
+  }
+};
+
+load();
+buildCasino();
+buildUpgrades();
+buildTalents();
+buildAchievements();
+buildCases();
+applySkin();
+showPage("game");
+resizeStars();
+requestAnimationFrame(drawStars);
+scheduleGolden();
+setInterval(tick, 100);
+setInterval(save, 15000);
+window.addEventListener("beforeunload", save);
+</script>
+</body>
+</html>
