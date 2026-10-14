@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>You are So pretty</title>
+<title>Incremental Game</title>
 <style>
   :root { --text: #f1ecff; --muted: #a79fc2; }
   * { box-sizing: border-box; }
@@ -36,7 +36,7 @@
   button:disabled { background: #2b2840; color: #6f6a8a; cursor: not-allowed; }
 
   #clicker { display: block; width: 150px; height: 150px; margin: 0 auto 1.2rem; border-radius: 50%; padding: 0; font-size: 4.2rem; line-height: 1;
-             background: radial-gradient(circle at 30% 28%, var(--g1,#fff3a0), var(--g2,#f5b300) 60%, var(--g3,#a86d00)); box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 30px rgba(var(--glow,255,200,0),.5);
+             background: transparent; box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 30px rgba(var(--glow,255,200,0),.5);
              animation: coinglow 2.4s ease-in-out infinite alternate; user-select: none; }
   #clicker:hover:not(:disabled) { box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 50px rgba(var(--glow,255,210,60),.9); }
   @keyframes coinglow { from { box-shadow: inset 0 -8px 18px rgba(0,0,0,.3), 0 0 20px rgba(var(--glow,255,200,0),.35); }
@@ -116,8 +116,8 @@
   .pcard.new { animation: dealin .3s ease-out; }
   @keyframes dealin { from { transform: translateY(-24px) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
 
-  #app.wide { max-width: 1100px; }
-  .tabs { display: flex; gap: .5rem; justify-content: center; margin: .3rem 0 1rem; }
+  #app.wide { max-width: 1240px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin: .3rem 0 1rem; }
   .tabs button { --c: #3a3556; opacity: .75; }
   .tabs button.active { --c: #7b4ae0; opacity: 1; box-shadow: 0 0 14px #7b4ae0; }
   #tp-badge { margin-left: .35rem; min-width: 1.3rem; padding: 0 .4rem; border-radius: 99px; background: #fbbf24; color: #2a2000;
@@ -133,7 +133,7 @@
   .row.owned { opacity: .7; }
 
   .tree-scroll { overflow-x: auto; padding-bottom: .5rem; }
-  #tree { position: relative; display: grid; grid-template-columns: repeat(8, minmax(96px, 1fr)); gap: 1.8rem .6rem; min-width: 880px; padding: .5rem; }
+  #tree { position: relative; display: grid; grid-template-columns: repeat(10, minmax(96px, 1fr)); gap: 1.8rem .6rem; min-width: 1090px; padding: .5rem; }
   #tree-lines { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
   .branch-title { text-align: center; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--c); z-index: 1; }
   .node { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: .15rem; text-align: center;
@@ -187,6 +187,49 @@
   .row.ach.done { opacity: 1; --c: #34d399; }
   .reward { font-weight: 800; color: #fbbf24; font-size: .8rem; white-space: nowrap; }
 
+  #f-embers { text-align: center; font-size: 2.4rem; font-weight: 800; background: linear-gradient(180deg, #fff0b0, #f97316);
+              -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 2px 8px rgba(249,115,22,.45)); }
+  #f-stoke { --c: #ea580c; margin-bottom: .6rem; font-size: 1.1rem; }
+  #f-rebirth { --c: #7c3aed; margin-bottom: .4rem; }
+  #f-rebirth.ready { background-image: linear-gradient(90deg, #7c3aed, #f97316, #fde047, #7c3aed); background-size: 300% 100%; }
+  #f-rbar { background: linear-gradient(90deg, #7c3aed, #f97316); }
+  #f-mbar { background: linear-gradient(90deg, #a78bfa, #fbbf24); }
+  .fmodes { display: flex; gap: .4rem; margin-bottom: .6rem; }
+  .fmodes button { --c: #3a3556; padding: .35rem .8rem; font-size: .85rem; }
+  .fmodes button.active { --c: #ea580c; box-shadow: 0 0 12px #ea580c; }
+  .row.fm { opacity: .6; --c: #64748b; }
+  .row.fm.done { opacity: 1; --c: #34d399; }
+  .row.fm.next { opacity: 1; --c: #fbbf24; }
+  body.foundry::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+                         background: radial-gradient(ellipse at bottom, rgba(234,88,12,.28), transparent 65%); }
+
+  #chal-banner { margin-bottom: 1rem; padding: .7rem; text-align: center; border-color: #f43f5e; box-shadow: 0 0 22px rgba(244,63,94,.35); }
+  #chal-bar { background: linear-gradient(90deg, #f43f5e, #fbbf24); }
+  #chal-abandon { --c: #3a3556; font-size: .75rem; padding: .3rem .7rem; margin-top: .5rem; }
+  .row.vr { --c: #64748b; }
+  .row.vr.done { --c: #34d399; }
+  #v-claim { --c: #d4a017; margin-top: .8rem; }
+  #v-claim.ready { background-image: linear-gradient(90deg, #d4a017, #ffe27a, #d4a017); color: #2a2000; }
+  #victory { position: fixed; inset: 0; z-index: 100; display: none; align-items: center; justify-content: center; background: rgba(8,5,20,.88); backdrop-filter: blur(6px); }
+  #victory .vbox { max-width: 520px; width: 92%; padding: 1.6rem; border-radius: 18px; text-align: center; border: 2px solid #fbbf24;
+                   background: linear-gradient(160deg, rgba(60,30,110,.96), rgba(20,12,45,.96)); box-shadow: 0 0 60px rgba(251,191,36,.5); }
+  #victory h1 { font-size: 2.4rem; margin: 0 0 .6rem; }
+  #v-stats { line-height: 1.7; margin-bottom: 1rem; }
+  .vbtns { display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
+
+  #clicker svg { width: 100%; height: 100%; display: block; pointer-events: none; filter: drop-shadow(0 5px 8px rgba(0,0,0,.5)); }
+  .skinsvg { display: block; overflow: visible; }
+  .bbadge { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; line-height: 1;
+            background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.4), var(--rc) 55%, rgba(0,0,0,.55));
+            box-shadow: inset 0 -4px 8px rgba(0,0,0,.35), 0 0 10px var(--rc); }
+  .ritem .ri { display: flex; align-items: center; justify-content: center; height: 58px; }
+  .skin .sem { display: flex; justify-content: center; }
+  .skin.locked .sem svg { filter: brightness(0) opacity(.5); }
+  .skin.owned .sem svg { filter: drop-shadow(0 3px 5px rgba(0,0,0,.45)); }
+  .skin.equipped .sem svg { filter: drop-shadow(0 0 9px var(--rc)); }
+  #case-result svg, #case-result .bbadge, #recent svg, #recent .bbadge { vertical-align: middle; display: inline-block; }
+  .rise svg { display: block; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
@@ -196,12 +239,20 @@
 <canvas id="stars"></canvas>
 <div id="flash"></div>
 <div id="app">
-  <h1>I Love You Nahla</h1>
+  <h1>Incremental Game</h1>
   <div class="tabs">
     <button id="tab-game" class="active">Game</button>
     <button id="tab-cases">Cases</button>
+    <button id="tab-foundry">Foundry</button>
     <button id="tab-talents">Talent Tree <span id="tp-badge" style="display:none"></span></button>
+    <button id="tab-victory">Victory</button>
   </div>
+  <div id="chal-banner" class="card" style="display:none">
+    <div id="chal-text" style="font-weight:700;margin-bottom:.4rem"></div>
+    <div class="bar"><i id="chal-bar"></i></div>
+    <button id="chal-abandon">Abandon challenge (your main game is restored)</button>
+  </div>
+
   <div id="page-game">
   <div id="coins">0 coins</div>
   <div id="cps" class="muted">0 / sec</div>
@@ -219,8 +270,9 @@
   </div>
 
   <div class="card">
-    <h2>Upgrades <span class="muted">(bought with coins, reset when you ascend)</span></h2>
+    <h2>Upgrades <span class="muted">(bought with coins, reset when you ascend unless kept)</span></h2>
     <div id="ushop"></div>
+    <div class="muted" id="ushop-more" style="margin-top:.4rem"></div>
   </div>
 
   <div class="card casino">
@@ -302,6 +354,62 @@
     </div>
   </div>
 
+  <div id="page-victory" style="display:none">
+    <div class="card gold">
+      <h2>Victory <span id="v-sum" class="muted"></span></h2>
+      <div class="muted" style="margin-bottom:.7rem">Buy everything to beat the game: complete every requirement below, then claim your victory. Each win gives +50% to all coins forever when you start New Game+.</div>
+      <div id="v-reqs"></div>
+      <button id="v-claim" class="big"></button>
+      <div class="muted" id="v-info"></div>
+      <button id="v-ngp" style="display:none;--c:#7c3aed;margin-top:.6rem">Start New Game+</button>
+    </div>
+    <div class="card">
+      <h2>Challenges <span id="c-sum" class="muted"></span></h2>
+      <div class="muted" style="margin-bottom:.7rem">Each challenge is a separate run from scratch with special rules, and your main game is saved and restored when you finish or abandon it. Reach the coin goal to beat the challenge. Your first clear of each one gives talent points and makes all your coins x1.15 forever.</div>
+      <div id="v-chals"></div>
+    </div>
+  </div>
+
+  <div id="page-foundry" style="display:none">
+    <div id="f-locked" class="card gold">
+      <h2>The Foundry</h2>
+      <div class="muted" style="margin-bottom:.7rem">A whole second idler with its own currency: 24 generator tiers, 40 upgrades, and a deep Rebirth loop with milestones and a Relic shop. Your Relics also boost the coins you earn in the main game.</div>
+      <button id="f-unlock" class="big"></button>
+    </div>
+    <div id="f-main" style="display:none">
+      <div class="card f-card">
+        <div id="f-embers">0 embers</div>
+        <div id="f-cps" class="muted" style="text-align:center;margin-bottom:.8rem"></div>
+        <button id="f-stoke" class="big">Stoke the Fire</button>
+        <button id="f-rebirth" class="big"></button>
+        <div class="bar" style="margin:.2rem 0 .4rem"><i id="f-rbar"></i></div>
+        <div class="muted" id="f-rinfo"></div>
+        <div class="muted" id="f-last" style="margin-top:.3rem"></div>
+        <label id="f-auto-wrap" class="muted" style="display:none;margin-top:.5rem"><input type="checkbox" id="f-auto" checked> Auto-rebirth when it would at least double my Relics</label>
+      </div>
+      <div class="card">
+        <h2>Generators</h2>
+        <div class="fmodes" id="f-modes"></div>
+        <div id="f-gens"></div>
+      </div>
+      <div class="card">
+        <h2>Foundry Upgrades <span class="muted">(embers, reset on rebirth unless kept)</span></h2>
+        <div id="f-upgs"></div>
+        <div class="muted" id="f-upgs-more" style="margin-top:.4rem"></div>
+      </div>
+      <div class="card violet">
+        <h2>Rebirth Milestones</h2>
+        <div class="muted" id="f-mile-info" style="margin-bottom:.4rem"></div>
+        <div class="bar" style="margin-bottom:.7rem"><i id="f-mbar"></i></div>
+        <div id="f-miles"></div>
+      </div>
+      <div class="card gold">
+        <h2>Relic Forge <span id="f-relics" class="muted"></span></h2>
+        <div id="f-rshop"></div>
+      </div>
+    </div>
+  </div>
+
   <div id="page-talents" style="display:none">
     <div class="card violet">
       <h2>Talent Tree</h2>
@@ -309,7 +417,7 @@
       <div class="muted" id="tp-next" style="margin:.2rem 0 .4rem"></div>
       <div class="bar" style="margin-bottom:.5rem"><i id="tp-bar"></i></div>
       <div class="muted" id="tp-break" style="margin-bottom:.7rem"></div>
-      <div class="muted" style="margin-bottom:.7rem">Talents are permanent: they survive ascending and transcending. Many have several ranks. Points come from lifetime coins, +2 per ascension, +5 per transcension, achievements, and rare case drops. Spend down each branch toward its capstone (the capstones need rank 2 in both talents above them), then unite all four branches for The Ascendant.</div>
+      <div class="muted" style="margin-bottom:.7rem">Talents are permanent: they survive ascending and transcending. Many have several ranks. Points come from lifetime coins, +1 per ascension (more with Ascension Echo), +3 per transcension, achievements, and rare case drops. Spend down each branch toward its capstone (the capstones need rank 2 in both talents above them), then unite all five branches for The Ascendant.</div>
       <button id="respec" style="--c:#3a3556;font-size:.85rem">Respec (refund all points)</button>
     </div>
     <div class="tree-scroll">
@@ -328,6 +436,11 @@
 </div>
 
 <button id="golden" title="Golden coin!">&#10022;</button>
+<div id="victory"><div class="vbox">
+  <h1>VICTORY!</h1>
+  <div id="v-stats"></div>
+  <div class="vbtns"><button id="v-keep" style="--c:#3a3556">Keep Playing</button><button id="v-ngp2" style="--c:#7c3aed">Start New Game+</button></div>
+</div></div>
 <div id="toast"></div>
 
 <script>
@@ -337,6 +450,18 @@ const GENERATORS = [
   { id: "miner",   name: "Miner",   icon: "\u26CF\uFE0F", color: "#fb923c", baseCost: 100,   baseCps: 1   },
   { id: "factory", name: "Factory", icon: "\u{1F3ED}", color: "#38bdf8", baseCost: 1100,  baseCps: 8   },
   { id: "portal",  name: "Portal",  icon: "\u{1F300}", color: "#c084fc", baseCost: 12000, baseCps: 47  },
+  { id: "lab",     name: "Alchemy Lab",    icon: "🧪", color: "#f472b6", baseCost: 130000,    baseCps: 260   },
+  { id: "time",    name: "Time Machine",   icon: "⏳", color: "#a3e635", baseCost: 1400000,   baseCps: 1400  },
+  { id: "star",    name: "Star Forge",     icon: "🌟", color: "#f97316", baseCost: 20000000,  baseCps: 7800  },
+  { id: "reality", name: "Reality Engine", icon: "🔮", color: "#e879f9", baseCost: 330000000, baseCps: 44000 },
+  { id: "gate",     name: "Dimension Gate",    icon: "🚪", color: "#2dd4bf", baseCost: 5.1e9,  baseCps: 2.6e5 },
+  { id: "hole",     name: "Black Hole Mine",   icon: "🕳️", color: "#818cf8", baseCost: 8.2e10, baseCps: 1.5e6 },
+  { id: "dyson",    name: "Dyson Swarm",       icon: "🛰️", color: "#fcd34d", baseCost: 1.4e12, baseCps: 8.8e6 },
+  { id: "sprout",   name: "Universe Sprout",   icon: "🌱", color: "#86efac", baseCost: 2.4e13, baseCps: 5.2e7 },
+  { id: "market",   name: "Multiverse Market", icon: "🏪", color: "#fda4af", baseCost: 4.1e14, baseCps: 3.1e8 },
+  { id: "entropy",  name: "Entropy Reverser",  icon: "♻️", color: "#67e8f9", baseCost: 7.4e15, baseCps: 1.9e9 },
+  { id: "omega",    name: "Omega Engine",      icon: "🔱", color: "#f87171", baseCost: 1.4e17, baseCps: 1.2e10 },
+  { id: "infinity", name: "Infinity Mint",     icon: "♾️", color: "#e9d5ff", baseCost: 2.8e18, baseCps: 7.5e10 },
 ];
 const COST_GROWTH = 1.15;
 const MILESTONES = [10, 25, 50, 100, 200];
@@ -346,15 +471,23 @@ const PRESTIGE_UPGRADES = [
   { id: "discount", name: "Bulk Discount", desc: "Generators 5% cheaper per level",      baseCost: 2, growth: 2,   max: 10 },
   { id: "synergy",  name: "Synergy",       desc: "+25% coins/sec per level",             baseCost: 3, growth: 2.5, max: 10 },
   { id: "head",     name: "Head Start",    desc: "Start each run with 500 coins/level",  baseCost: 2, growth: 2,   max: 10 },
+  { id: "seed",     name: "Seed Stock",    desc: "Start each run with 5 Cursors and 2 Miners per level",  baseCost: 2, growth: 1.8, max: 10 },
+  { id: "retain",   name: "Retention",     desc: "Keep your 3 cheapest upgrades per level when ascending", baseCost: 3, growth: 2,   max: 5  },
+  { id: "voucher",  name: "Case Voucher",  desc: "Gain a free Bronze case each time you ascend, per level", baseCost: 4, growth: 2,   max: 5  },
+  { id: "pass",     name: "Casino Pass",   desc: "Gain 2 casino tickets each time you ascend, per level",  baseCost: 2, growth: 2,   max: 5  },
 ];
 const PP_BONUS = 0.10;
 const PP_DIVISOR = 10000;
 
 const STARDUST_UPGRADES = [
-  { id: "ppboost",  name: "Cosmic Insight",  desc: "+25% prestige points gained per level",       baseCost: 1, growth: 2, max: 10 },
-  { id: "residual", name: "Residual Energy", desc: "Start each transcension with 5 PP per level", baseCost: 1, growth: 2, max: 10 },
+  { id: "ppboost",  name: "Cosmic Insight",  desc: "+25% prestige points gained per level",       baseCost: 1, growth: 4, max: 10 },
+  { id: "residual", name: "Residual Energy", desc: "Start each transcension with 5 PP per level", baseCost: 1, growth: 4, max: 10 },
   { id: "timewarp", name: "Time Warp",       desc: "+2 hours offline progress cap per level",     baseCost: 2, growth: 2, max: 5  },
-  { id: "auto",     name: "Auto-Buyer",      desc: "Automatically buys generators for you",       baseCost: 500, growth: 1, max: 1  },
+  { id: "auto",     name: "Auto-Buyer",      desc: "Automatically buys generators for you",       baseCost: 100, growth: 1, max: 1  },
+  { id: "eternal",  name: "Eternal Upgrades",    desc: "Per-run upgrades no longer reset when you ascend",  baseCost: 16, growth: 1,   max: 1  },
+  { id: "autoupg",  name: "Upgrade Automation",  desc: "Automatically buys upgrades when you can afford them", baseCost: 5, growth: 1, max: 1  },
+  { id: "amp",      name: "Stardust Amplifier",  desc: "+10% to the Stardust multiplier bonus per level",   baseCost: 2, growth: 1.7, max: 10 },
+  { id: "echo",     name: "Ascension Echo",      desc: "+1 talent point per ascension, per level",          baseCost: 4, growth: 2,   max: 3  },
 ];
 const SD_BONUS = 0.50;
 const SD_DIVISOR = 25;
@@ -369,13 +502,39 @@ const CASINO_GAMES = [
 
 // Per-run upgrades bought with coins. They reset when you ascend (cheap to rebuy as you grow).
 const UPGRADES = [
-  { id: "sharper",   icon: "\u{1F446}", name: "Sharper Fingers", cost: 500,     desc: "Click power x2" },
-  { id: "lucky",     icon: "\u{1F340}", name: "Lucky Clicks",    cost: 2000,    desc: "+10% chance for a x10 critical click" },
-  { id: "combo",     icon: "\u{1F525}", name: "Combo Meter",     cost: 8000,    desc: "Rapid clicking builds your click power up to x3" },
-  { id: "auto",      icon: "\u{1F916}", name: "Auto-Clicker",    cost: 25000,   desc: "Clicks for you 4 times a second at half power" },
-  { id: "magnet",    icon: "\u{1F9F2}", name: "Golden Magnet",   cost: 50000,   desc: "Golden coins appear 2x as often and last 50% longer" },
-  { id: "frenzy",    icon: "\u26A1",    name: "Frenzy",          cost: 100000,  desc: "Unlocks the Frenzy button: x7 clicks and production for 20s (2 min cooldown)" },
-  { id: "overclock", icon: "\u{1F680}", name: "Overclock",       cost: 1000000, desc: "+50% generator output" },
+  { id: "sharper",   icon: "👆", name: "Sharper Fingers",    cost: 500,         desc: "Click power x2" },
+  { id: "g-cursor",  icon: "🖱️", name: "Reinforced Cursors", cost: 1000,        desc: "Cursors produce x2" },
+  { id: "lucky",     icon: "🍀", name: "Lucky Clicks",       cost: 2000,        desc: "+10% chance for a x10 critical click" },
+  { id: "thrift",    icon: "🏷️", name: "Coupon Book",        cost: 4000,        desc: "Generators cost 5% less" },
+  { id: "g-miner",   icon: "⛏️", name: "Sharper Pickaxes",   cost: 7500,        desc: "Miners produce x2" },
+  { id: "combo",     icon: "🔥", name: "Combo Meter",        cost: 8000,        desc: "Rapid clicking builds your click power up to x3" },
+  { id: "auto",      icon: "🤖", name: "Auto-Clicker",       cost: 25000,       desc: "Clicks for you 4 times a second at half power" },
+  { id: "finger",    icon: "☝️", name: "Finger Training",    cost: 40000,       desc: "Every click also gives 2% of your coins/sec" },
+  { id: "magnet",    icon: "🧲", name: "Golden Magnet",      cost: 50000,       desc: "Golden coins appear 2x as often and last 50% longer" },
+  { id: "g-factory", icon: "🦾", name: "Robotic Arms",       cost: 80000,       desc: "Factories produce x2" },
+  { id: "frenzy",    icon: "⚡", name: "Frenzy",             cost: 100000,      desc: "Unlocks the Frenzy button: x7 clicks and production for 20s (2 min cooldown)" },
+  { id: "audit",     icon: "📋", name: "Efficiency Audit",   cost: 250000,      desc: "Generators cost another 5% less" },
+  { id: "booth",     icon: "🎫", name: "Ticket Booth",       cost: 300000,      desc: "Casino tickets regenerate 50% faster and you can hold 3 more" },
+  { id: "heavy",     icon: "🔨", name: "Heavy Hitter",       cost: 400000,      desc: "Critical clicks hit 10x harder" },
+  { id: "g-portal",  icon: "🌀", name: "Stabilized Portals", cost: 800000,      desc: "Portals produce x2" },
+  { id: "overclock", icon: "🚀", name: "Overclock",          cost: 1000000,     desc: "+50% generator output" },
+  { id: "coupon",    icon: "💳", name: "Case Coupon",        cost: 2000000,     desc: "Cases cost 15% less" },
+  { id: "longfrenzy",icon: "⏱️", name: "Extended Frenzy",    cost: 2500000,     desc: "Frenzy lasts 10s longer and recharges 20s faster" },
+  { id: "network",   icon: "🕸️", name: "Synergy Network",    cost: 5000000,     desc: "+0.2% generator output for every generator you own" },
+  { id: "g-lab",     icon: "⚗️", name: "Lab Equipment",      cost: 9000000,     desc: "Alchemy Labs produce x2" },
+  { id: "magnet2",   icon: "🧲", name: "Mega Magnet",        cost: 10000000,    desc: "Golden coins appear 50% more often" },
+  { id: "contract",  icon: "📜", name: "Golden Contract",    cost: 20000000,    desc: "Golden coins pay x2" },
+  { id: "g-time",    icon: "🕰️", name: "Chrono Calibration", cost: 100000000,   desc: "Time Machines produce x2" },
+  { id: "g-star",    icon: "☄️", name: "Stellar Alloys",     cost: 1400000000,  desc: "Star Forges produce x2" },
+  { id: "g-reality", icon: "🔮", name: "Reality Anchors",    cost: 22000000000, desc: "Reality Engines produce x2" },
+  { id: "g-gate",     icon: "🚪", name: "Gate Stabilizers",       cost: 3.6e11, desc: "Dimension Gates produce x2" },
+  { id: "g-hole",     icon: "🕳️", name: "Event Horizon Drills",   cost: 5.7e12, desc: "Black Hole Mines produce x2" },
+  { id: "g-dyson",    icon: "🛰️", name: "Swarm Coordination",     cost: 1e14,   desc: "Dyson Swarms produce x2" },
+  { id: "g-sprout",   icon: "🌱", name: "Cosmic Fertilizer",      cost: 1.7e15, desc: "Universe Sprouts produce x2" },
+  { id: "g-market",   icon: "🏪", name: "Arbitrage Engines",      cost: 2.9e16, desc: "Multiverse Markets produce x2" },
+  { id: "g-entropy",  icon: "♻️", name: "Time-Reversed Ledgers",  cost: 5.2e17, desc: "Entropy Reversers produce x2" },
+  { id: "g-omega",    icon: "🔱", name: "Omega Overclock",        cost: 9.8e18, desc: "Omega Engines produce x2" },
+  { id: "g-infinity", icon: "♾️", name: "Infinite Mintage",       cost: 2e20,   desc: "Infinity Mints produce x2" },
 ];
 
 // Talent tree. Rows go top to bottom: 1 (cheap) to 4, row 5 is the capstone, row 6 the ultimate.
@@ -385,6 +544,7 @@ const BRANCHES = [
   { name: "Fingers",  icon: "👆", color: "#fb7185" },
   { name: "Fortune",  icon: "🍀", color: "#34d399" },
   { name: "Treasure", icon: "🎁", color: "#38bdf8" },
+  { name: "Ascension", icon: "🔁", color: "#f472b6" },
 ];
 const GRAND_COLOR = "#c084fc";
 const TALENTS = [
@@ -396,7 +556,7 @@ const TALENTS = [
   { id: "w3b", branch: 0, row: 3, col: 1, max: 1, cost: 2, icon: "💠", name: "Deep Veins",        desc: "Factories and Portals produce x2", req: ["w2b"] },
   { id: "w4a", branch: 0, row: 4, col: 0, max: 3, cost: 2, icon: "📉", name: "Economy of Scale",  desc: "Generator prices climb more slowly, per rank", req: ["w3a"] },
   { id: "w4b", branch: 0, row: 4, col: 1, max: 3, cost: 2, icon: "💵", name: "Dividends",         desc: "+2% output per ascension done (max 50), per rank", req: ["w3b"] },
-  { id: "w5",  branch: 0, row: 5, max: 1, cost: 5, rr: 2, icon: "👑", name: "Midas Engine", tag: "CAPSTONE", desc: "ALL generator output x3 and generators 15% cheaper", req: ["w4a", "w4b"] },
+  { id: "w5",  branch: 0, row: 6, max: 1, cost: 5, rr: 2, icon: "👑", name: "Midas Engine", tag: "CAPSTONE", desc: "ALL generator output x3 and generators 15% cheaper", req: ["w5a", "w5b"] },
   // --- Fingers ---
   { id: "c1",  branch: 1, row: 1, max: 5, cost: 1, icon: "🖐️", name: "Calloused Hands",   desc: "+40% click power per rank", req: [] },
   { id: "c2a", branch: 1, row: 2, col: 0, max: 5, cost: 1, icon: "🎯", name: "Critical Eye",    desc: "+3% critical click chance per rank", req: ["c1"] },
@@ -405,7 +565,7 @@ const TALENTS = [
   { id: "c3b", branch: 1, row: 3, col: 1, max: 3, cost: 2, icon: "⚡", name: "Frenzy Focus",    desc: "Rank 1 unlocks Frenzy. Each rank: +2 power, +5s, -15s cooldown", req: ["c2b"] },
   { id: "c4a", branch: 1, row: 4, col: 0, max: 3, cost: 2, icon: "💥", name: "Devastating Crits", desc: "Critical clicks hit +5x harder per rank", req: ["c3a"] },
   { id: "c4b", branch: 1, row: 4, col: 1, max: 3, cost: 2, icon: "☄️", name: "Finger Power",    desc: "Each click also gives +5% of your coins/sec per rank", req: ["c3b"] },
-  { id: "c5",  branch: 1, row: 5, max: 1, cost: 5, rr: 2, icon: "☝️", name: "Finger of God", tag: "CAPSTONE", desc: "Clicks also give +25% of your coins/sec. Base crit damage x25", req: ["c4a", "c4b"] },
+  { id: "c5",  branch: 1, row: 6, max: 1, cost: 5, rr: 2, icon: "☝️", name: "Finger of God", tag: "CAPSTONE", desc: "Clicks also give +25% of your coins/sec. Base crit damage x25", req: ["c5a", "c5b"] },
   // --- Fortune ---
   { id: "f1",  branch: 2, row: 1, max: 3, cost: 1, icon: "🍀", name: "Lucky Penny",       desc: "Golden coins appear 10% more often and last 20% longer per rank", req: [] },
   { id: "f2a", branch: 2, row: 2, col: 0, max: 3, cost: 1, icon: "🎟️", name: "Ticket Printer", desc: "Casino tickets regenerate 20% faster per rank", req: ["f1"] },
@@ -414,7 +574,7 @@ const TALENTS = [
   { id: "f3b", branch: 2, row: 3, col: 1, max: 3, cost: 2, icon: "✨", name: "Pure Insight",    desc: "+10% prestige points gained per rank", req: ["f2b"] },
   { id: "f4a", branch: 2, row: 4, col: 0, max: 3, cost: 2, icon: "🌠", name: "Golden Frenzy",   desc: "Golden coins have a 10% chance per rank to grant x5 production for 15s", req: ["f3a"] },
   { id: "f4b", branch: 2, row: 4, col: 1, max: 3, cost: 2, icon: "⏳", name: "Time Warp",       desc: "+4 hours of offline progress per rank", req: ["f3b"] },
-  { id: "f5",  branch: 2, row: 5, max: 1, cost: 5, rr: 2, icon: "🌟", name: "Fortune's Favorite", tag: "CAPSTONE", desc: "Golden coins pay x3 and appear 2x as often. Casino wins x2", req: ["f4a", "f4b"] },
+  { id: "f5",  branch: 2, row: 6, max: 1, cost: 5, rr: 2, icon: "🌟", name: "Fortune's Favorite", tag: "CAPSTONE", desc: "Golden coins pay x3 and appear 2x as often. Casino wins x2", req: ["f5a", "f5b"] },
   // --- Treasure (cases and skins) ---
   { id: "t1",  branch: 3, row: 1, max: 3, cost: 1, icon: "🧾", name: "Bulk Orders",       desc: "Cases cost 10% less per rank", req: [] },
   { id: "t2a", branch: 3, row: 2, col: 0, max: 3, cost: 1, icon: "🔑", name: "Lucky Keys",      desc: "Better odds per rank: fewer Commons, more Rare+ drops", req: ["t1"] },
@@ -423,35 +583,168 @@ const TALENTS = [
   { id: "t3b", branch: 3, row: 3, col: 1, max: 3, cost: 2, icon: "🎁", name: "Free Samples",    desc: "Earn free Bronze cases over time (every 15, 10, then 6 min)", req: ["t2b"] },
   { id: "t4a", branch: 3, row: 4, col: 0, max: 3, cost: 2, icon: "🧲", name: "Bonus Magnet",    desc: "Bonus drops are 25% stronger per rank", req: ["t3a"] },
   { id: "t4b", branch: 3, row: 4, col: 1, max: 3, cost: 2, icon: "🔮", name: "Legend Seeker",   desc: "Legendary odds +50% per rank", req: ["t3b"] },
-  { id: "t5",  branch: 3, row: 5, max: 1, cost: 5, rr: 2, icon: "🏛️", name: "Grand Collector", tag: "CAPSTONE", desc: "Skin bonus x2, cases 25% cheaper, +1 casino ticket per case opened", req: ["t4a", "t4b"] },
-  // --- Ultimate: needs all four capstones ---
-  { id: "ascend", branch: 4, row: 6, max: 1, cost: 8, icon: "🌌", name: "The Ascendant", tag: "ULTIMATE",
-    desc: "ALL coins and clicks x5, +50% prestige points, +16h offline cap, and every case is Rare or better", req: ["w5", "c5", "f5", "t5"] },
+  { id: "t5",  branch: 3, row: 6, max: 1, cost: 5, rr: 2, icon: "🏛️", name: "Grand Collector", tag: "CAPSTONE", desc: "Skin bonus x2, cases 25% cheaper, +1 casino ticket per case opened", req: ["t5a", "t5b"] },
+  // --- new row 5 for the first four branches (capstones need rank 2 in both) ---
+  { id: "w5a", branch: 0, row: 5, col: 0, max: 3, cost: 3, icon: "🏗️", name: "Industrial Revolution", desc: "+15% generator output per rank", req: ["w4a"] },
+  { id: "w5b", branch: 0, row: 5, col: 1, max: 3, cost: 3, icon: "🔭", name: "Cosmic Assembly",       desc: "Generators 5 to 16 produce +25% per rank", req: ["w4b"] },
+  { id: "c5a", branch: 1, row: 5, col: 0, max: 3, cost: 3, icon: "🌪️", name: "Overdrive",             desc: "Frenzy is +3 stronger per rank", req: ["c4a"] },
+  { id: "c5b", branch: 1, row: 5, col: 1, max: 3, cost: 3, icon: "🎼", name: "Combo Surge",           desc: "Combo builds 50% faster per rank", req: ["c4b"] },
+  { id: "f5a", branch: 2, row: 5, col: 0, max: 3, cost: 3, icon: "🃏", name: "Gambler's Luck",        desc: "Casino wins +20% per rank", req: ["f4a"] },
+  { id: "f5b", branch: 2, row: 5, col: 1, max: 3, cost: 3, icon: "🌅", name: "Golden Hour",           desc: "Golden coins last 30% longer per rank", req: ["f4b"] },
+  { id: "t5a", branch: 3, row: 5, col: 0, max: 3, cost: 3, icon: "🔍", name: "Master Appraiser",      desc: "Skin collection bonus +25% per rank", req: ["t4a"] },
+  { id: "t5b", branch: 3, row: 5, col: 1, max: 3, cost: 3, icon: "🥠", name: "Fortune Cookies",       desc: "5% chance per rank that a case you paid for is refunded", req: ["t4b"] },
+  // --- Ascension (prestige, Foundry, challenges and victory) ---
+  { id: "a1",  branch: 4, row: 1, max: 3, cost: 1, icon: "🔁", name: "Prestige Echo",         desc: "Each Prestige Point gives +1% more, per rank", req: [] },
+  { id: "a2a", branch: 4, row: 2, col: 0, max: 3, cost: 1, icon: "🌇", name: "Afterglow",         desc: "After you ascend, x2 production for 30s per rank", req: ["a1"] },
+  { id: "a2b", branch: 4, row: 2, col: 1, max: 3, cost: 1, icon: "💫", name: "Stardust Affinity", desc: "+10% Stardust bonus per rank", req: ["a1"] },
+  { id: "a3a", branch: 4, row: 3, col: 0, max: 3, cost: 2, icon: "🔥", name: "Foundry Link",      desc: "+25% Foundry production per rank", req: ["a2a"] },
+  { id: "a3b", branch: 4, row: 3, col: 1, max: 3, cost: 2, icon: "🏺", name: "Relic Resonance",   desc: "Relics boost main-game coins +0.3% more each, per rank", req: ["a2b"] },
+  { id: "a4a", branch: 4, row: 4, col: 0, max: 3, cost: 2, icon: "🎖️", name: "Challenger's Pride", desc: "Challenge medals give +0.03 more (base x1.15), per rank", req: ["a3a"] },
+  { id: "a4b", branch: 4, row: 4, col: 1, max: 3, cost: 2, icon: "🏁", name: "Victory Lap",       desc: "Each win gives +10% more coins, per rank (base +50%)", req: ["a3b"] },
+  { id: "a5a", branch: 4, row: 5, col: 0, max: 3, cost: 3, icon: "🦅", name: "Rebirth Fervor",    desc: "+10% Relics gained per rank", req: ["a4a"] },
+  { id: "a5b", branch: 4, row: 5, col: 1, max: 3, cost: 3, icon: "🌠", name: "Stardust Surge",    desc: "+10% Stardust gained per rank", req: ["a4b"] },
+  { id: "a6",  branch: 4, row: 6, max: 1, cost: 5, rr: 2, icon: "♾️", name: "Eternal Return", tag: "CAPSTONE", desc: "Prestige Point, Stardust and Relic gains x1.5, and Afterglow lasts twice as long", req: ["a5a", "a5b"] },
+  // --- Ultimate: needs all five capstones ---
+  { id: "ascend", branch: 5, row: 7, max: 1, cost: 8, icon: "🌌", name: "The Ascendant", tag: "ULTIMATE",
+    desc: "ALL coins and clicks x5, +50% prestige points, +16h offline cap, and every case is Rare or better", req: ["w5", "c5", "f5", "t5", "a6"] },
 ];
 const freshUpg = () => Object.fromEntries(UPGRADES.map(u => [u.id, false]));
 const freshTal = () => Object.fromEntries(TALENTS.map(t => [t.id, 0]));
 
 // ----- cases, skins, bonuses -----
 const RARITIES = [
-  { name: "Common",    color: "#9ca3af", coll: 0.01, dup: 1  },   // coll = coin bonus per skin owned, dup = bonus units paid for a duplicate
-  { name: "Uncommon",  color: "#4ade80", coll: 0.02, dup: 2  },
-  { name: "Rare",      color: "#60a5fa", coll: 0.04, dup: 5  },
-  { name: "Epic",      color: "#c084fc", coll: 0.08, dup: 12 },
-  { name: "Legendary", color: "#fbbf24", coll: 0.15, dup: 30 },
+  { name: "Common",    color: "#9ca3af", coll: 0.008, dup: 1  },   // coll = coin bonus per skin owned, dup = bonus units paid for a duplicate
+  { name: "Uncommon",  color: "#4ade80", coll: 0.015, dup: 2  },
+  { name: "Rare",      color: "#60a5fa", coll: 0.03, dup: 5  },
+  { name: "Epic",      color: "#c084fc", coll: 0.05, dup: 12 },
+  { name: "Legendary", color: "#fbbf24", coll: 0.10, dup: 30 },
 ];
 const SKINS = [
-  { id: "gold",      default: true, rarity: 0, emoji: "🪙", name: "Gold Coin",     g: ["#fff3a0", "#f5b300", "#a86d00"], glow: "255,200,0" },
-  { id: "copper",    rarity: 0, emoji: "🟤", name: "Copper Coin",   g: ["#f0c9a0", "#b87333", "#6b3f1c"], glow: "184,115,51" },
-  { id: "moon",      rarity: 0, emoji: "🌕", name: "Pale Moon",     g: ["#ffffff", "#e5e7eb", "#9ca3af"], glow: "229,231,235" },
-  { id: "emerald",   rarity: 1, emoji: "🟢", name: "Emerald Coin",  g: ["#b9ffd2", "#22c55e", "#0f6b34"], glow: "34,197,94" },
-  { id: "sky",       rarity: 1, emoji: "🔵", name: "Sky Coin",      g: ["#cfe8ff", "#3b82f6", "#1d3f8f"], glow: "59,130,246" },
-  { id: "ruby",      rarity: 2, emoji: "🔴", name: "Ruby Coin",     g: ["#ffd0d0", "#ef4444", "#7a1111"], glow: "239,68,68" },
-  { id: "amethyst",  rarity: 2, emoji: "🟣", name: "Amethyst Coin", g: ["#ead5ff", "#a855f7", "#4c1d95"], glow: "168,85,247" },
-  { id: "solar",     rarity: 3, emoji: "☀️", name: "Solar Flare",   g: ["#fff7b0", "#fb923c", "#b43b00"], glow: "251,146,60" },
-  { id: "ice",       rarity: 3, emoji: "❄️", name: "Ice Crystal",   g: ["#ffffff", "#7dd3fc", "#0e7490"], glow: "125,211,252" },
-  { id: "galaxy",    rarity: 4, emoji: "🌌", name: "Galaxy",        g: ["#e9d5ff", "#7c3aed", "#1e1b4b"], glow: "124,58,237" },
-  { id: "dragon",    rarity: 4, emoji: "🐉", name: "Dragon Egg",    g: ["#fff3a0", "#f43f5e", "#4a0d1f"], glow: "244,63,94" },
+  { id: "gold",      default: true, rarity: 0, name: "Gold Coin",     base: "coin", emblem: "star",    g: ["#fff1a8", "#f5b800", "#8f5a00"], glow: "255,196,0" },
+  // common
+  { id: "copper",    rarity: 0, name: "Copper Penny",   base: "coin", emblem: "star",    g: ["#ffd3a3", "#c4742f", "#6e3a14"], glow: "196,116,47" },
+  { id: "moon",      rarity: 0, name: "Pale Moon",      base: "coin", emblem: "moon",    g: ["#ffffff", "#d9dde6", "#8b94a8"], glow: "220,225,240", ink: "#5b6478" },
+  { id: "clay",      rarity: 0, name: "Clay Token",     base: "hex",  emblem: "diamond", g: ["#f4c6a0", "#b9714a", "#6a3b24"], glow: "185,113,74" },
+  { id: "pebble",    rarity: 0, name: "River Pebble",   base: "orb",  emblem: "none",    g: ["#e4eef7", "#8fa7bb", "#475a6e"], glow: "143,167,187" },
+  { id: "bronze",    rarity: 0, name: "Bronze Medal",   base: "coin", emblem: "crown",   g: ["#ffe0a8", "#d58a3a", "#74410f"], glow: "213,138,58" },
+  // uncommon
+  { id: "emerald",   rarity: 1, name: "Emerald",        base: "gem",  emblem: "none",    g: ["#c8ffdc", "#22c55e", "#0b5a2b"], glow: "34,197,94" },
+  { id: "sky",       rarity: 1, name: "Sky Coin",       base: "coin", emblem: "sun",     g: ["#d6ecff", "#3b9bff", "#1c3f94"], glow: "59,155,255" },
+  { id: "jade",      rarity: 1, name: "Jade Charm",     base: "hex",  emblem: "clover",  g: ["#c9fff0", "#14b8a6", "#0a5c55"], glow: "20,184,166" },
+  { id: "quartz",    rarity: 1, name: "Rose Quartz",    base: "gem",  emblem: "none",    g: ["#ffe1ee", "#f58cb6", "#a13a6a"], glow: "245,140,182" },
+  { id: "lemon",     rarity: 1, name: "Lemon Drop",     base: "orb",  emblem: "none",    g: ["#fffbb8", "#fde047", "#b88a00"], glow: "253,224,71" },
+  // rare
+  { id: "ruby",      rarity: 2, name: "Ruby",           base: "gem",  emblem: "none",    g: ["#ffd0d6", "#e11d48", "#6b0a22"], glow: "225,29,72" },
+  { id: "amethyst",  rarity: 2, name: "Amethyst",       base: "gem",  emblem: "none",    g: ["#ecd9ff", "#9b5cf6", "#431a85"], glow: "155,92,246" },
+  { id: "sapphire",  rarity: 2, name: "Sapphire Orb",   base: "orb",  emblem: "star",    g: ["#cfe0ff", "#2563eb", "#10286e"], glow: "37,99,235" },
+  { id: "silver",    rarity: 2, name: "Silver Crown",   base: "coin", emblem: "crown",   g: ["#ffffff", "#cfd6e0", "#6b7585"], glow: "207,214,224", ink: "#4b5565" },
+  { id: "heartstone",rarity: 2, name: "Heartstone",     base: "hex",  emblem: "heart",   g: ["#ffd1e0", "#ec4899", "#7a1747"], glow: "236,72,153" },
+  // epic
+  { id: "solar",     rarity: 3, name: "Solar Flare",    base: "coin", emblem: "sun",     g: ["#fff4a8", "#ff9f1c", "#a63a00"], glow: "255,159,28" },
+  { id: "ice",       rarity: 3, name: "Ice Crystal",    base: "gem",  emblem: "snow",    g: ["#f4fdff", "#79d6f5", "#0b6f8c"], glow: "121,214,245" },
+  { id: "storm",     rarity: 3, name: "Stormcaller",    base: "orb",  emblem: "bolt",    g: ["#e6d9ff", "#7c5cff", "#1d1a6e"], glow: "124,92,255" },
+  { id: "inferno",   rarity: 3, name: "Inferno Coin",   base: "coin", emblem: "flame",   g: ["#ffd9a0", "#ff5a1f", "#7a1200"], glow: "255,90,31" },
+  { id: "pearl",     rarity: 3, name: "Tidal Pearl",    base: "orb",  emblem: "swirl",   g: ["#e9fffb", "#5eead4", "#0c5e63"], glow: "94,234,212" },
+  // legendary
+  { id: "galaxy",    rarity: 4, name: "Galaxy",         base: "orb",  emblem: "swirl",   g: ["#f0e4ff", "#7c3aed", "#120d3d"], glow: "124,58,237" },
+  { id: "dragon",    rarity: 4, name: "Dragon Egg",     base: "egg",  emblem: "none",    g: ["#ffe9a3", "#f43f5e", "#3b0a1c"], glow: "244,63,94" },
+  { id: "phoenix",   rarity: 4, name: "Phoenix Coin",   base: "coin", emblem: "flame",   g: ["#fff3a8", "#ff7a18", "#a1120a"], glow: "255,122,24" },
+  { id: "eternity",  rarity: 4, name: "Eternity Gem",   base: "gem",  emblem: "star",    g: ["#ff9aa2", "#ffe28a", "#9dffb4", "#8fd3ff", "#c4a3ff"], glow: "196,163,255" },
 ];
+const skinById = id => SKINS.find(s => s.id === id) || SKINS[0];
+
+// ---- skin art: every skin is drawn as a glossy SVG (coin, hex token, gem, orb or egg) ----
+let svgUid = 0;
+const polyArr = (cx, cy, r, n, rot) => Array.from({ length: n }, (_, i) => {
+  const a = (rot + i * 360 / n) * Math.PI / 180;
+  return [+(cx + Math.cos(a) * r).toFixed(1), +(cy + Math.sin(a) * r).toFixed(1)];
+});
+const ptsStr = a => a.map(p => p.join(",")).join(" ");
+function starPts(cx, cy, R, r, n) {
+  const out = [];
+  for (let i = 0; i < n * 2; i++) {
+    const a = Math.PI / n * i - Math.PI / 2, rad = i % 2 ? r : R;
+    out.push((cx + Math.cos(a) * rad).toFixed(1) + "," + (cy + Math.sin(a) * rad).toFixed(1));
+  }
+  return out.join(" ");
+}
+const rays = (n, len) => Array.from({ length: n }, (_, i) => `<rect x="48.5" y="${24 - 0}" width="3" height="${len}" rx="1.5" transform="rotate(${i * 360 / n} 50 50)"/>`).join("");
+const EMBLEMS = {
+  none: () => "",
+  star: () => `<polygon points="${starPts(50, 50, 25, 10.5, 5)}"/>`,
+  crown: () => `<path d="M26 64 L30 36 L43 50 L50 32 L57 50 L70 36 L74 64 Z"/><rect x="26" y="66" width="48" height="7" rx="2"/>`,
+  bolt: () => `<polygon points="57,20 33,54 47,54 42,80 67,44 53,44"/>`,
+  flame: () => `<path d="M50 18 C58 33 71 41 69 57 C68 70 59 79 50 79 C41 79 32 70 31 57 C31 49 38 45 41 35 C45 40 47 42 50 18 Z"/>`,
+  moon: () => `<path d="M58 24 A28 28 0 1 0 58 76 A21 21 0 1 1 58 24 Z"/>`,
+  sun: () => `<circle cx="50" cy="50" r="12"/>` + rays(8, 9),
+  heart: () => `<path d="M50 74 C28 58 26 42 37 36 C44 32 50 38 50 43 C50 38 56 32 63 36 C74 42 72 58 50 74 Z"/>`,
+  diamond: () => `<polygon points="50,24 72,50 50,76 28,50"/>`,
+  clover: () => `<circle cx="41" cy="41" r="11"/><circle cx="59" cy="41" r="11"/><circle cx="41" cy="59" r="11"/><circle cx="59" cy="59" r="11"/><rect x="48" y="60" width="4" height="18" rx="2"/>`,
+  snow: () => [0, 60, 120].map(a => `<rect x="48" y="22" width="4" height="56" rx="2" transform="rotate(${a} 50 50)"/>`).join("") +
+              `<circle cx="50" cy="50" r="7"/>`,
+  swirl: () => `<path d="M50 50 m0 0 a5 5 0 0 1 10 0 a12 12 0 0 1 -24 0 a20 20 0 0 1 40 0 a28 28 0 0 1 -56 0" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`,
+};
+
+function skinSvg(s, px) {
+  const u = "k" + (svgUid++), g = s.g;
+  const stops = arr => arr.map((c, i) => `<stop offset="${Math.round(i / (arr.length - 1) * 100)}%" stop-color="${c}"/>`).join("");
+  const defs = `<linearGradient id="${u}r" x1="0" y1="0" x2="1" y2="1">${stops(g)}</linearGradient>` +
+               `<radialGradient id="${u}f" cx="32%" cy="26%" r="85%">${stops(g)}</radialGradient>`;
+  const emb = (EMBLEMS[s.emblem] || EMBLEMS.none)();
+  const ink = s.ink || "rgba(255,255,255,.93)";
+  const emblem = emb ? `<g transform="translate(1.6 2.2)" fill="rgba(0,0,0,.33)" style="color:rgba(0,0,0,.33)">${emb}</g><g fill="currentColor" style="color:${ink}">${emb}</g>` : "";
+  let outline = "", body = "";
+  if (s.base === "coin") {
+    outline = `<circle cx="50" cy="50" r="48"/>`;
+    const ticks = px >= 40 ? Array.from({ length: 40 }, (_, i) => `<rect x="49" y="2.5" width="2" height="5" fill="rgba(0,0,0,.28)" transform="rotate(${i * 9} 50 50)"/>`).join("") : "";
+    body = `<circle cx="50" cy="50" r="48" fill="url(#${u}r)"/>${ticks}<circle cx="50" cy="50" r="48" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>` +
+           `<circle cx="50" cy="50" r="40" fill="url(#${u}f)"/><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>` +
+           `<circle cx="50" cy="50" r="36.5" fill="none" stroke="rgba(0,0,0,.2)"/>${emblem}` +
+           `<ellipse cx="36" cy="27" rx="20" ry="9" fill="rgba(255,255,255,.32)" transform="rotate(-32 36 27)"/>`;
+  } else if (s.base === "hex") {
+    outline = `<polygon points="${ptsStr(polyArr(50, 50, 47, 6, -90))}"/>`;
+    body = `<polygon points="${ptsStr(polyArr(50, 50, 47, 6, -90))}" fill="url(#${u}r)" stroke="rgba(0,0,0,.35)" stroke-width="1.5" stroke-linejoin="round"/>` +
+           `<polygon points="${ptsStr(polyArr(50, 50, 38, 6, -90))}" fill="url(#${u}f)" stroke="rgba(255,255,255,.4)" stroke-width="1.5" stroke-linejoin="round"/>${emblem}` +
+           `<ellipse cx="38" cy="28" rx="19" ry="8" fill="rgba(255,255,255,.3)" transform="rotate(-32 38 28)"/>`;
+  } else if (s.base === "gem") {
+    const O = polyArr(50, 50, 46, 8, -22.5), T = polyArr(50, 50, 22, 8, -22.5);
+    outline = `<polygon points="${ptsStr(O)}"/>`;
+    const shade = [.28, .05, .18, 0, .3, .08, .2, .02];
+    let facets = "";
+    for (let i = 0; i < 8; i++) {
+      const j = (i + 1) % 8;
+      facets += `<polygon points="${ptsStr([T[i], T[j], O[j], O[i]])}" fill="${i % 2 ? "rgba(0,0,0," + (0.1 + shade[i]) + ")" : "rgba(255,255,255," + (0.12 + shade[i]) + ")"}"/>`;
+    }
+    body = `<polygon points="${ptsStr(O)}" fill="url(#${u}f)" stroke="rgba(0,0,0,.4)" stroke-width="1.5" stroke-linejoin="round"/>${facets}` +
+           `<polygon points="${ptsStr(T)}" fill="url(#${u}r)" opacity=".85" stroke="rgba(255,255,255,.55)" stroke-width="1.2" stroke-linejoin="round"/>` +
+           (emblem ? `<g opacity=".85" transform="translate(50 50) scale(.55) translate(-50 -50)">${emblem}</g>` : "") +
+           `<polygon points="${starPts(31, 27, 10, 2, 4)}" fill="rgba(255,255,255,.95)"/>`;
+  } else if (s.base === "orb") {
+    outline = `<circle cx="50" cy="50" r="46"/>`;
+    body = `<circle cx="50" cy="50" r="46" fill="url(#${u}f)" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>` +
+           `<ellipse cx="50" cy="83" rx="26" ry="8" fill="rgba(255,255,255,.18)"/>` +
+           (emblem ? `<g opacity=".78" transform="translate(50 50) scale(.78) translate(-50 -50)">${emblem}</g>` : "") +
+           `<ellipse cx="36" cy="26" rx="22" ry="12" fill="rgba(255,255,255,.55)" transform="rotate(-30 36 26)"/><circle cx="67" cy="70" r="4" fill="rgba(255,255,255,.35)"/>`;
+  } else {   // egg
+    outline = `<ellipse cx="50" cy="54" rx="33" ry="43"/>`;
+    let scales = "";
+    for (let r = 0; r < 6; r++) for (let c = 0; c < 6; c++) {
+      const x = 24 + c * 11 + (r % 2 ? 5.5 : 0), y = 26 + r * 9.5;
+      if (Math.pow((x - 50) / 30, 2) + Math.pow((y - 54) / 40, 2) < 0.85) scales += `<path d="M${x - 5.5} ${y} a5.5 5.5 0 0 0 11 0" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.6"/>`;
+    }
+    body = `<ellipse cx="50" cy="54" rx="33" ry="43" fill="url(#${u}f)" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>${scales}` +
+           `<ellipse cx="38" cy="33" rx="11" ry="18" fill="rgba(255,255,255,.28)" transform="rotate(-18 38 33)"/>${emblem}`;
+  }
+  // epic and legendary skins get a sweeping glint
+  const shine = s.rarity >= 3 && px >= 40
+    ? `<clipPath id="${u}c">${outline}</clipPath><g clip-path="url(#${u}c)"><rect x="-60" y="-10" width="16" height="120" fill="rgba(255,255,255,.42)" transform="skewX(-20)">` +
+      `<animate attributeName="x" values="-60;140;140" keyTimes="0;.5;1" dur="${s.rarity === 4 ? 2.6 : 3.8}s" repeatCount="indefinite"/></rect></g>` : "";
+  return `<svg class="skinsvg" viewBox="0 0 100 100" width="${px}" height="${px}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>${defs}</defs>${body}${shine}</svg>`;
+}
+function itemIcon(it, px) {
+  if (it.type === "skin") return skinSvg(skinById(it.id), px);
+  return `<span class="bbadge" style="--rc:${RARITIES[it.rarity].color};width:${px}px;height:${px}px;font-size:${Math.round(px * 0.55)}px">${it.icon}</span>`;
+}
 // kind: coins (amount = bonus units), tickets, buff (mult for secs), tp (talent points)
 const BONUSES = [
   { id: "b-change", type: "bonus", rarity: 0, icon: "🪙", name: "Pocket Change",  kind: "coins",   amount: 1.5 },
@@ -466,7 +759,7 @@ const BONUSES = [
   { id: "b-hoard",  type: "bonus", rarity: 4, icon: "🏆", name: "Dragon Hoard",   kind: "coins",   amount: 120 },
   { id: "b-dilate", type: "bonus", rarity: 4, icon: "⏳", name: "Time Dilation",  kind: "buff",    mult: 5, secs: 600 },
 ];
-const ITEMS = SKINS.filter(s => !s.default).map(s => ({ id: s.id, type: "skin", rarity: s.rarity, icon: s.emoji, name: s.name })).concat(BONUSES);
+const ITEMS = SKINS.filter(s => !s.default).map(s => ({ id: s.id, type: "skin", rarity: s.rarity, icon: "", name: s.name })).concat(BONUSES);
 // price = max(minCost, secs of your income), weights = Common..Legendary
 const CASE_TIERS = [
   { id: "bronze", name: "Bronze Case", icon: "📦", color: "#cd7f32", minCost: 5000,   secs: 300,  weights: [70, 22, 7, 1, 0.2] },
@@ -494,6 +787,136 @@ const ACHIEVEMENTS = [
   { id: "combo",     name: "In The Zone",        desc: "Fill the combo meter",              tp: 1, goal: 1,     cur: () => state.comboMaxed },
   { id: "frenzy",    name: "Go Wild",            desc: "Activate Frenzy",                   tp: 1, goal: 1,     cur: () => state.frenzies },
   { id: "upgrades",  name: "Fully Upgraded",     desc: "Own all upgrades at the same time", tp: 1, goal: UPGRADES.length, cur: () => Object.values(state.upg).filter(Boolean).length },
+  { id: "f-open",    name: "Foundry Founder",    desc: "Unlock the Foundry",                tp: 1, goal: 1,     cur: () => state.f.unlocked ? 1 : 0 },
+  { id: "f-reb1",    name: "Reborn",             desc: "Rebirth in the Foundry",            tp: 1, goal: 1,     cur: () => state.f.rebirths },
+  { id: "f-reb10",   name: "Phoenix",            desc: "Rebirth 10 times",                  tp: 2, goal: 10,    cur: () => state.f.rebirths },
+  { id: "f-all",     name: "Master Smith",       desc: "Own every Foundry generator at once", tp: 2, goal: 1,   cur: () => FGENS.every(g => state.f.owned[g.id] > 0) ? 1 : 0 },
+  { id: "f-relic",   name: "Relic Hunter",       desc: "Earn 100 Relics",                   tp: 2, goal: 100,   cur: () => state.f.relicTotal },
+  { id: "victory",   name: "Victorious",         desc: "Beat the game",                     tp: 3, goal: 1,     cur: () => state.meta.wins },
+  { id: "chal3",     name: "Challenger",         desc: "Clear 3 challenges",                tp: 2, goal: 3,     cur: () => chalCount() },
+];
+
+// ---------- FOUNDRY (second idler) data ----------
+const F_UNLOCK_COST = 25000000;      // main-game coins to open the tab
+const F_GROWTH = 1.14;               // price growth per generator bought
+const F_REL_DIV = 3e5;               // relics = sqrt(embers this run / this) * bonuses
+const F_RELIC_BONUS = 0.2;           // each Relic earned adds +20% to all Foundry production
+const F_MILES = [10, 25, 50, 100, 200, 300, 400];   // owning this many of a generator multiplies its output
+const F_NAMES = [
+  ["Bellows", "🌬️"], ["Coal Pit", "⚫"], ["Forge Hand", "🔨"], ["Anvil", "⚒️"], ["Smelter", "🏭"], ["Foundry Vat", "🥘"],
+  ["Alloy Press", "🗜️"], ["Steam Engine", "🚂"], ["Rail Cart", "🚃"], ["Mine Shaft", "🕳️"], ["Crystal Cavern", "💎"], ["Mithril Vein", "🔷"],
+  ["Dragon Furnace", "🐲"], ["Lava Tap", "🌋"], ["Sky Crucible", "☁️"], ["Storm Hammer", "⛈️"], ["Star Smith", "🌠"], ["Meteor Mine", "☄️"],
+  ["Void Anvil", "🌑"], ["Moon Kiln", "🌙"], ["Sun Core", "☀️"], ["Nebula Loom", "🌌"], ["Galaxy Press", "🌀"], ["Primordial Flame", "🔥"],
+];
+const FGENS = F_NAMES.map(([name, icon], i) => ({
+  id: "f" + i, name, icon, tier: Math.floor(i / 8),
+  color: "hsl(" + Math.round(18 + i * 13) + ",85%,60%)",
+  baseCost: Math.round(10 * Math.pow(5.2, i)),
+  baseCps: 0.25 * Math.pow(4.3, i),
+}));
+
+// 24 generator upgrades (x2 each) + 16 general ones, sorted by price. Rebirth can keep the cheapest ones.
+const FUPGS = FGENS.map(g => ({ id: "u" + g.id, icon: g.icon, name: g.name + " Tuning", cost: g.baseCost * 25, desc: g.name + " production x2" }))
+  .concat([
+    { id: "hot",      icon: "🔥", name: "Hotter Coals",         cost: 100,    desc: "Stoke power x2" },
+    { id: "astoke",   icon: "🤖", name: "Auto-Stoker",          cost: 5000,   desc: "Stokes automatically twice a second at half power" },
+    { id: "lucky",    icon: "🍀", name: "Lucky Spark",          cost: 30000,  desc: "10% chance for a x10 critical stoke" },
+    { id: "fan",      icon: "🌬️", name: "Fan the Flames",       cost: 1e5,    desc: "Each stoke also gives 3% of your embers/sec" },
+    { id: "cheap1",   icon: "🏷️", name: "Bulk Contracts",       cost: 5e5,    desc: "Generators cost 5% less" },
+    { id: "kit",      icon: "🧰", name: "Starter Kit",          cost: 2e6,    desc: "Start every rebirth with 10 Bellows and 5 Coal Pits" },
+    { id: "overtime", icon: "⏰", name: "Overtime Shifts",      cost: 1e7,    desc: "All production +25%" },
+    { id: "crit2",    icon: "💥", name: "Crit Mastery",         cost: 5e7,    desc: "Critical stokes hit x25" },
+    { id: "cheap2",   icon: "📜", name: "Guild Charter",        cost: 2e8,    desc: "Generators cost another 5% less" },
+    { id: "craft",    icon: "🛠️", name: "Master Craftsmen",     cost: 2e9,    desc: "All production x1.5" },
+    { id: "mile",     icon: "📈", name: "Milestone Mastery",    cost: 3e10,   desc: "Generator milestones multiply output by x2.5 instead of x2" },
+    { id: "interest", icon: "🏦", name: "Ember Interest",       cost: 5e11,   desc: "+0.2% production for every generator you own" },
+    { id: "anvil",    icon: "🔨", name: "Forgemaster's Hammer", cost: 1e13,   desc: "Stoke power x10" },
+    { id: "draft",    icon: "🌀", name: "Cosmic Draft",         cost: 2e14,   desc: "All production x3" },
+    { id: "loyal",    icon: "♾️", name: "Eternal Embers",       cost: 5e15,   desc: "+3% production per rebirth done (up to 100 rebirths)" },
+    { id: "relicp",   icon: "🏺", name: "Relic Polish",         cost: 1e17,   desc: "Relics are 25% stronger" },
+  ]).sort((a, b) => a.cost - b.cost);
+
+// permanent perks unlocked by how many rebirths you have done
+const FMILES = [
+  { at: 1,   text: "+10% production forever", prod: 1.1 },
+  { at: 2,   text: "Start every rebirth with 1,000 embers", startEmbers: 1000 },
+  { at: 3,   text: "Keep your 8 cheapest upgrades through rebirth", keep: 8 },
+  { at: 5,   text: "Generators are bought automatically", autoGen: true },
+  { at: 7,   text: "Start every rebirth with 25 of each of your first 5 generators", seed: 25 },
+  { at: 10,  text: "Keep 16 upgrades and gain +10% more Relics", keep: 16, relicBonus: 0.1 },
+  { at: 15,  text: "Upgrades are bought automatically", autoUpg: true },
+  { at: 20,  text: "All production x2 forever", prod: 2 },
+  { at: 30,  text: "Keep your 24 cheapest upgrades", keep: 24 },
+  { at: 40,  text: "Unlocks auto-rebirth", autoReb: true },
+  { at: 50,  text: "+25% more Relics and production x3 forever", relicBonus: 0.25, prod: 3 },
+  { at: 75,  text: "Keep ALL upgrades through rebirth", keep: 40 },
+  { at: 100, text: "All production x5 forever: Grandmaster of the Forge", prod: 5 },
+];
+
+// Relics are spent here. Total Relics earned (spent or not) still give the global bonus.
+const FRSHOP = [
+  { id: "surge",   icon: "🔥", name: "Ember Surge",      desc: "+50% stoke power per level",                         baseCost: 1,  growth: 1.8, max: 10 },
+  { id: "head",    icon: "🪔", name: "Ember Reserve",    desc: "Start each rebirth with 500 embers per level",       baseCost: 1,  growth: 1.6, max: 10 },
+  { id: "gear",    icon: "⚙️", name: "Gearwork",         desc: "Generators cost 2% less per level",                  baseCost: 2,  growth: 1.7, max: 15 },
+  { id: "deep",    icon: "⛏️", name: "Deep Veins",       desc: "Generators 1-8 produce +25% per level",              baseCost: 2,  growth: 1.8, max: 20 },
+  { id: "smith",   icon: "⏳", name: "Time Smith",       desc: "+1 hour of offline progress per level",              baseCost: 2,  growth: 1.8, max: 10 },
+  { id: "greater", icon: "🏅", name: "Greater Milestones", desc: "Generator milestones are 5% stronger per level",   baseCost: 3,  growth: 1.9, max: 10 },
+  { id: "bounty",  icon: "💎", name: "Rebirth Bounty",   desc: "+10% Relics gained per level",                       baseCost: 3,  growth: 1.9, max: 10 },
+  { id: "higher",  icon: "🏭", name: "Higher Forges",    desc: "Generators 9-16 produce +25% per level",             baseCost: 4,  growth: 1.8, max: 20 },
+  { id: "cosmic",  icon: "🌌", name: "Cosmic Anvils",    desc: "Generators 17-24 produce +25% per level",            baseCost: 8,  growth: 1.8, max: 20 },
+  { id: "insight", icon: "✨", name: "Spark of Insight", desc: "Grants +1 main-game talent point per level",         baseCost: 15, growth: 2,   max: 5  },
+];
+const freshF = () => ({
+  unlocked: false, embers: 0, run: 0, life: 0, stokes: 0,
+  owned: Object.fromEntries(FGENS.map(g => [g.id, 0])),
+  upg: {}, relics: 0, relicTotal: 0, rebirths: 0,
+  rshop: Object.fromEntries(FRSHOP.map(r => [r.id, 0])),
+  buy: "1", runStart: Date.now(), last: null, autoOn: true,
+});
+
+// ---------- VICTORY AND CHALLENGES data ----------
+// goal = lifetime coins earned inside the challenge run
+const CHALLENGES = [
+  { id: "hands",      icon: "🙌", name: "Hands Off",    goal: 1e8, tp: 3, rules: ["noclick"],
+    text: "No manual clicking: the coin and golden coins are disabled. Auto-clickers are allowed. You start with 30 coins." },
+  { id: "clicker",    icon: "👆", name: "Clicker Only", goal: 1e11, tp: 3, rules: ["clickeronly"],
+    text: "Generators and auto-clickers produce nothing. Instead, every click collects half a second of your generators' production." },
+  { id: "speed",      icon: "⏱️", name: "Speed Run",    goal: 1e5, tp: 3, rules: [], limit: 1800,
+    text: "You only have 30 minutes. Reach the goal before time runs out." },
+  { id: "noprestige", icon: "🚫", name: "No Prestige",  goal: 1e10, tp: 3, rules: ["noprestige"],
+    text: "Ascending and transcending are disabled for this run." },
+  { id: "inflation",  icon: "📈", name: "Inflation",    goal: 1e9, tp: 3, rules: ["inflation"],
+    text: "Every generator costs 4x more." },
+  { id: "bare",       icon: "🦴", name: "Bare Bones",   goal: 1e6, tp: 3, rules: ["noupg", "notalent"],
+    text: "Upgrades and talents are disabled. You only have generators, prestige and luck." },
+  { id: "purist",     icon: "🏆", name: "The Purist",   goal: 1e8, tp: 8, rules: ["noclick", "noprestige", "noupg", "notalent"],
+    text: "No clicking, no prestige, no upgrades and no talents. Just generators." },
+];
+const rule = r => {
+  if (!state.chal.id) return false;
+  const c = CHALLENGES.find(x => x.id === state.chal.id);
+  return !!c && c.rules.includes(r);
+};
+// "buy everything": every requirement must be met at the same time
+const VICTORY_REQS = [
+  { id: "gens",     name: "Build the Empire",      desc: "Own 25 of every generator",
+    goal: 25, cur: () => Math.min(...GENERATORS.map(g => state.owned[g.id])) },
+  { id: "upgs",     name: "Fully Upgraded",        desc: "Own every upgrade at the same time",
+    goal: UPGRADES.length, cur: () => Object.values(state.upg).filter(Boolean).length },
+  { id: "casino",   name: "Casino Royale",         desc: "Unlock both casino games",
+    goal: 2, cur: () => Object.values(state.casino).filter(Boolean).length },
+  { id: "skins",    name: "Skin Collector",        desc: "Own every skin",
+    goal: SKINS.length - 1, cur: () => skinCount() },
+  { id: "talents",  name: "Talent Master",         desc: "Unlock all five capstone talents and The Ascendant",
+    goal: 6, cur: () => ["w5", "c5", "f5", "t5", "a6", "ascend"].filter(id => (Number(state.talents[id]) || 0) > 0).length },
+  { id: "prestige", name: "Prestige Shopper",      desc: "Own every Prestige upgrade and every Stardust upgrade (level 1 or more)",
+    goal: PRESTIGE_UPGRADES.length + STARDUST_UPGRADES.length,
+    cur: () => PRESTIGE_UPGRADES.filter(u => puLevel(u.id) > 0).length + STARDUST_UPGRADES.filter(u => suLevel(u.id) > 0).length },
+  { id: "fgens",    name: "Foundry: Generators",   desc: "Unlock the Foundry and own every Foundry generator",
+    goal: FGENS.length, cur: () => state.f.unlocked ? FGENS.filter(g => state.f.owned[g.id] > 0).length : 0 },
+  { id: "fupgs",    name: "Foundry: Upgrades",     desc: "Own every Foundry upgrade and every Relic Forge upgrade",
+    goal: FUPGS.length + FRSHOP.length,
+    cur: () => Object.values(state.f.upg).filter(Boolean).length + FRSHOP.filter(r => (state.f.rshop[r.id] || 0) > 0).length },
 ];
 
 // ---------- 2. STATE ----------
@@ -517,6 +940,10 @@ function freshState() {
     buffMult: 1, buffUntil: 0,                 // temporary production boost from drops
     clicks: 0, crits: 0, goldens: 0, frenzies: 0, comboMaxed: 0,
     ach: {}, bonusTP: 0,
+    f: freshF(),               // the Foundry (second idler)
+    playSecs: 0, won: false,   // play time, victory claimed this run
+    meta: { wins: 0, winTimes: [], chalDone: {} },   // survives New Game+ and challenge runs
+    chal: { id: null, start: 0, vault: null },       // active challenge and the saved main game
     lastTick: Date.now(),
   };
 }
@@ -525,14 +952,20 @@ let state = freshState();
 // ---------- 3. CORE MATH ----------
 const puLevel = id => state.pu[id] || 0;
 const suLevel = id => state.su[id] || 0;
-const prestigeMult = () => 1 + PP_BONUS * state.ppTotal;
-const stardustMult = () => 1 + SD_BONUS * state.sdTotal;
-const globalMult = () => prestigeMult() * stardustMult() * (tal("ascend") ? 5 : 1) * collMult() * buffMult();   // applies to clicks and generators
+const prestigeMult = () => 1 + (PP_BONUS + 0.01 * rk("a1")) * state.ppTotal;
+const stardustMult = () => 1 + SD_BONUS * (1 + 0.1 * suLevel("amp") + 0.1 * rk("a2b")) * state.sdTotal;
+const globalMult = () => prestigeMult() * stardustMult() * (tal("ascend") ? 5 : 1) * collMult() * buffMult() * foundryLink() * metaMult();   // applies to clicks and generators
 const milestoneMult = n => Math.pow(2, MILESTONES.filter(m => n >= m).length);
 
-const rk = id => Number(state.talents[id]) || 0;   // current rank of a talent
+const rk = id => rule("notalent") ? 0 : Number(state.talents[id]) || 0;   // current rank of a talent
+const chalCount = () => Object.keys(state.meta.chalDone).length;
+// New Game+ wins (+50% each) and challenge medals (x1.15 each); challenge runs ignore them
+const winBonus = () => 0.5 + 0.1 * rk("a4b");
+const winMult = () => 1 + winBonus() * state.meta.wins;
+const medalBase = () => 1.15 + 0.03 * rk("a4a");
+const metaMult = () => state.chal.id ? 1 : winMult() * Math.pow(medalBase(), chalCount());
 const tal = id => rk(id) > 0;
-const upgOn = id => !!state.upg[id];
+const upgOn = id => !rule("noupg") && !!state.upg[id];
 let combo = 0, lastClickAt = 0;   // click combo meter (not saved)
 
 const totalGens = () => GENERATORS.reduce((s, g) => s + state.owned[g.id], 0);
@@ -541,64 +974,67 @@ const totalGens = () => GENERATORS.reduce((s, g) => s + state.owned[g.id], 0);
 const buffActive = () => Date.now() < state.buffUntil;
 const buffMult = () => buffActive() ? state.buffMult : 1;
 const collMult = () => 1 + SKINS.filter(s => !s.default && state.skins[s.id]).reduce((a, s) => a + RARITIES[s.rarity].coll, 0) *
-  (1 + 0.2 * rk("t2b")) * (tal("t5") ? 2 : 1);
+  (1 + 0.2 * rk("t2b") + 0.25 * rk("t5a")) * (tal("t5") ? 2 : 1);
 
 // frenzy (active ability)
-const frenzyPower = () => 7 + 2 * rk("c3b");
-const frenzyDur = () => 20 + 5 * rk("c3b");
-const frenzyCd = () => 120 - 15 * rk("c3b");
+const frenzyPower = () => 7 + 2 * rk("c3b") + 3 * rk("c5a");
+const frenzyDur = () => 20 + 5 * rk("c3b") + (upgOn("longfrenzy") ? 10 : 0);
+const frenzyCd = () => 120 - 15 * rk("c3b") - (upgOn("longfrenzy") ? 20 : 0);
 const frenzyAvail = () => upgOn("frenzy") || tal("c3b");
 const frenzyActive = () => Date.now() < state.frenzyUntil;
 const frenzyMult = () => frenzyActive() ? frenzyPower() : 1;
 
 // generators
 const cost = g => Math.floor(g.baseCost * Math.pow(COST_GROWTH - 0.003 * rk("w4a"), state.owned[g.id]) * Math.pow(0.95, puLevel("discount")) *
-  Math.pow(0.97, rk("w1")) * (tal("w5") ? 0.85 : 1));
+  Math.pow(0.97, rk("w1")) * (tal("w5") ? 0.85 : 1) * (upgOn("thrift") ? 0.95 : 1) * (upgOn("audit") ? 0.95 : 1) * (rule("inflation") ? 4 : 1));
 const genCps = g => g.baseCps * state.owned[g.id] * milestoneMult(state.owned[g.id]) *
   ((tal("w3a") && (g.id === "cursor" || g.id === "miner")) ? 2 : 1) *
-  ((tal("w3b") && (g.id === "factory" || g.id === "portal")) ? 2 : 1);
-const prodMult = () => (1 + 0.10 * rk("w2a") + 0.003 * rk("w2b") * totalGens() + 0.02 * rk("w4b") * Math.min(state.ascensions, 50)) *
+  ((tal("w3b") && (g.id === "factory" || g.id === "portal")) ? 2 : 1) *
+  (upgOn("g-" + g.id) ? 2 : 1) *
+  (GENERATORS.indexOf(g) >= 4 ? 1 + 0.25 * rk("w5b") : 1);
+const prodMult = () => (1 + 0.10 * rk("w2a") + 0.003 * rk("w2b") * totalGens() + 0.02 * rk("w4b") * Math.min(state.ascensions, 50) + (upgOn("network") ? 0.002 * totalGens() : 0) + 0.15 * rk("w5a") + 0.01 * 0) *
   (tal("w5") ? 3 : 1) * (upgOn("overclock") ? 1.5 : 1) * (1 + 0.25 * puLevel("synergy"));
 const genIncome = g => genCps(g) * globalMult() * prodMult() * frenzyMult();
 
 // clicking
-const comboMax = () => 2 + rk("c2b");
-const comboMult = () => upgOn("combo") ? 1 + combo : 1;
+const comboMax = () => 2 + rk("c2b");const comboMult = () => upgOn("combo") ? 1 + combo : 1;
 const critChance = () => 0.03 * rk("c2a") + (upgOn("lucky") ? 0.10 : 0);
-const critMult = () => (tal("c5") ? 25 : 10) + 5 * rk("c4a");
+const critMult = () => (tal("c5") ? 25 : 10) + 5 * rk("c4a") + (upgOn("heavy") ? 10 : 0);
 const clickBase = () => state.clickPower * (1 + puLevel("touch")) * (1 + 0.4 * rk("c1")) * (upgOn("sharper") ? 2 : 1) * globalMult() * frenzyMult();
 const autoEff = () => (upgOn("auto") ? 0.5 : 0) + 0.2 * rk("c3a");
-const autoIncome = () => autoEff() * 4 * clickBase();
-const cps = () => GENERATORS.reduce((s, g) => s + genIncome(g), 0) + autoIncome();
-const clickShare = () => 0.05 * rk("c4b") + (tal("c5") ? 0.25 : 0);   // part of coins/sec added to every click
-const clickValue = () => clickBase() * comboMult() + clickShare() * cps();
+const autoIncome = () => rule("clickeronly") ? 0 : autoEff() * 4 * clickBase();
+const rawCps = () => GENERATORS.reduce((s, g) => s + genIncome(g), 0) + autoIncome();
+const cps = () => rule("clickeronly") ? 0 : rawCps();   // Clicker Only: nothing runs by itself
+const clickShare = () => 0.05 * rk("c4b") + (tal("c5") ? 0.25 : 0) + (upgOn("finger") ? 0.02 : 0);   // part of coins/sec added to every click
+const clickValue = () => clickBase() * comboMult() + clickShare() * rawCps() + (rule("clickeronly") ? 0.5 * rawCps() : 0);
 
 // golden coins and casino
-const goldenRate = () => 1 / (1 + 0.1 * rk("f1")) * (tal("f5") ? 0.5 : 1) * (upgOn("magnet") ? 0.5 : 1);
-const goldenLife = () => (1 + 0.2 * rk("f1")) * (upgOn("magnet") ? 1.5 : 1);
-const goldenMult = () => (1 + 0.5 * rk("f2b")) * (tal("f5") ? 3 : 1);
-const casinoMult = () => (1 + 0.15 * rk("f3a")) * (tal("f5") ? 2 : 1);
-const ticketMax = () => TICKET_BASE_MAX + 2 * rk("f3a");
-const ticketSeconds = () => TICKET_BASE_SECONDS / (1 + 0.2 * rk("f2a"));
+const goldenRate = () => 1 / (1 + 0.1 * rk("f1")) * (tal("f5") ? 0.5 : 1) * (upgOn("magnet") ? 0.5 : 1) * (upgOn("magnet2") ? 1 / 1.5 : 1);
+const goldenLife = () => (1 + 0.2 * rk("f1")) * (upgOn("magnet") ? 1.5 : 1) * (1 + 0.3 * rk("f5b"));
+const goldenMult = () => (1 + 0.5 * rk("f2b")) * (tal("f5") ? 3 : 1) * (upgOn("contract") ? 2 : 1);
+const casinoMult = () => (1 + 0.15 * rk("f3a")) * (tal("f5") ? 2 : 1) * (1 + 0.2 * rk("f5a"));
+const ticketMax = () => TICKET_BASE_MAX + 2 * rk("f3a") + (upgOn("booth") ? 3 : 0);
+const ticketSeconds = () => TICKET_BASE_SECONDS / (1 + 0.2 * rk("f2a") + (upgOn("booth") ? 0.5 : 0));
 
 // talent points: lifetime coins (log scale), ascensions, transcensions, achievements, rare drops
-const tpFromCoins = () => Math.max(0, Math.floor(3 * Math.log10(state.lifetimeEarned / 300)));
+const tpFromCoins = () => Math.max(0, Math.floor(1.5 * Math.log10(state.lifetimeEarned / 2000)));
 const tpAch = () => ACHIEVEMENTS.reduce((s, a) => s + (state.ach[a.id] ? a.tp : 0), 0);
-const tpEarned = () => tpFromCoins() + 2 * state.ascensions + 5 * state.transcensions + tpAch() + state.bonusTP;
+const tpEarned = () => tpFromCoins() + (1 + suLevel("echo")) * state.ascensions + 3 * state.transcensions + tpAch() + state.bonusTP;
 const tpSpent = () => TALENTS.reduce((s, t) => s + t.cost * rk(t.id), 0);
 const tpFree = () => tpEarned() - tpSpent();
-const nextCoinTPAt = () => 300 * Math.pow(10, (tpFromCoins() + 1) / 3);
+const nextCoinTPAt = () => 2000 * Math.pow(10, (tpFromCoins() + 1) / 1.5);
 const upCost = (u, level) => Math.ceil(u.baseCost * Math.pow(u.growth, level));
 
-const ppBoost = () => 1 + 0.25 * suLevel("ppboost") + 0.1 * rk("f3b") + (tal("ascend") ? 0.5 : 0);
+const ppBoost = () => (1 + 0.25 * suLevel("ppboost") + 0.1 * rk("f3b") + (tal("ascend") ? 0.5 : 0)) * (tal("a6") ? 1.5 : 1);
 const ppGain = () => Math.floor(Math.sqrt(state.runEarned / PP_DIVISOR) * ppBoost());
 const coinsForNextPP = () => Math.pow((ppGain() + 1) / ppBoost(), 2) * PP_DIVISOR;
-const sdGain = () => Math.floor(Math.sqrt(state.ppRun / SD_DIVISOR));
-const ppForNextSD = () => Math.pow(sdGain() + 1, 2) * SD_DIVISOR;
+const sdMult = () => (1 + 0.1 * rk("a5b")) * (tal("a6") ? 1.5 : 1);
+const sdGain = () => Math.floor(Math.sqrt(state.ppRun / SD_DIVISOR) * sdMult());
+const ppForNextSD = () => Math.pow((sdGain() + 1) / sdMult(), 2) * SD_DIVISOR;
 
 function fmt(n) {
   if (n < 1000) return n.toFixed(n < 10 ? 1 : 0);
-  const suffixes = ["K", "M", "B", "T", "Qa", "Qi"];
+  const suffixes = ["K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc"];
   const exp = Math.min(Math.floor(Math.log10(n) / 3), suffixes.length);
   return (n / Math.pow(1000, exp)).toFixed(2) + suffixes[exp - 1];
 }
@@ -653,7 +1089,7 @@ setInterval(() => {
   const r = $("clicker").getBoundingClientRect();
   const el = document.createElement("div");
   el.className = "rise";
-  el.textContent = currentSkin().emoji;
+  el.innerHTML = skinSvg(currentSkin(), 18);
   el.style.left = (r.left + 20 + Math.random() * (r.width - 40)) + "px";
   el.style.top = (r.top + r.height * 0.3) + "px";
   document.body.appendChild(el);
@@ -694,12 +1130,13 @@ function earn(amount) {
 }
 
 function clickCoin(e) {
+  if (rule("noclick")) { toast("No clicking in this challenge!"); return; }
   let v = clickValue();
   const crit = Math.random() < critChance();
   if (crit) v *= critMult();
   earn(v);
   state.clicks++; if (crit) state.crits++;
-  if (upgOn("combo")) { combo = Math.min(comboMax(), combo + 0.1); if (combo >= comboMax() - 0.001) state.comboMaxed = 1; }
+  if (upgOn("combo")) { combo = Math.min(comboMax(), combo + 0.1 * (1 + 0.5 * rk("c5b"))); if (combo >= comboMax() - 0.001) state.comboMaxed = 1; }
   lastClickAt = Date.now();
   let x = e.clientX, y = e.clientY;
   if (!x && !y) { const r = $("clicker").getBoundingClientRect(); x = r.left + r.width / 2; y = r.top; }
@@ -730,20 +1167,30 @@ function buyUpgrade(list, levels, currency, id, prefix) {
 }
 
 function ascend() {
+  if (rule("noprestige")) { toast("Prestige is disabled in this challenge."); return; }
   const gain = ppGain();
   if (gain < 1) return;
   if (!confirm(`Ascend now? You'll reset coins and generators but gain ${gain} prestige point${gain > 1 ? "s" : ""}.`)) return;
   state.pp += gain; state.ppTotal += gain; state.ppRun += gain; state.ascensions++;
   state.coins = 500 * puLevel("head");
   state.runEarned = 0;
-  state.upg = freshUpg(); combo = 0;
+  if (!suLevel("eternal")) {
+    state.upg = freshUpg();
+    UPGRADES.slice(0, 3 * puLevel("retain")).forEach(u => { state.upg[u.id] = true; });   // Retention keeps the cheapest ones
+  }
+  combo = 0;
   state.owned = Object.fromEntries(GENERATORS.map(g => [g.id, 0]));
+  state.owned.cursor = 5 * puLevel("seed"); state.owned.miner = 2 * puLevel("seed");
+  state.freeCases += puLevel("voucher"); state.tickets += 2 * puLevel("pass");
+  if (rule("noclick")) state.coins = Math.max(state.coins, 30);   // no clicking: keep the run from soft-locking
+  if (rk("a2a") > 0) addBuff(2, 30 * rk("a2a") * (tal("a6") ? 2 : 1));   // Afterglow
   burst(innerWidth / 2, innerHeight / 2, ["#ffd84a", "#ffb300", "#fff3a0", "#ff9a3c"], 45);
   flash("radial-gradient(circle, #ffe27a, transparent 70%)");
   toast(`Ascended! +${gain} PP`);
 }
 
 function transcend() {
+  if (rule("noprestige")) { toast("Prestige is disabled in this challenge."); return; }
   const gain = sdGain();
   if (gain < 1) return;
   if (!confirm(`Transcend now? This resets coins, generators, ALL prestige points and prestige upgrades, but gives ${gain} stardust (permanent).`)) return;
@@ -756,18 +1203,20 @@ function transcend() {
   state.pu = Object.fromEntries(PRESTIGE_UPGRADES.map(u => [u.id, 0]));
   burst(innerWidth / 2, innerHeight / 2, ["#b07eff", "#ff7ad9", "#7ad7ff", "#ffffff"], 90);
   flash("radial-gradient(circle, #c9a8ff, #3b1b7a 80%)");
+  if (rule("noclick")) state.coins = Math.max(state.coins, 30);
   toast(`Transcended! +${gain} stardust`);
 }
 
 function autoBuy() {
-  if (!suLevel("auto")) return;
-  GENERATORS.forEach(g => { if (state.coins >= cost(g)) buy(g.id); });
+  if (suLevel("auto")) GENERATORS.forEach(g => { if (state.coins >= cost(g)) buy(g.id); });
+  if (suLevel("autoupg")) UPGRADES.forEach(u => { if (!state.upg[u.id] && state.coins >= u.cost) buyUpg(u.id, true); });
 }
 
 // ---------- 6. GOLDEN COIN ----------
 const golden = $("golden");
 function scheduleGolden() { setTimeout(spawnGolden, (45 + Math.random() * 45) * 1000 * goldenRate()); }
 function spawnGolden() {
+  if (rule("noclick")) { scheduleGolden(); return; }
   golden.style.left = (10 + Math.random() * 75) + "vw";
   golden.style.top = (15 + Math.random() * 65) + "vh";
   golden.style.display = "block";
@@ -990,12 +1439,15 @@ function tick() {
   const dt = (now - state.lastTick) / 1000;
   state.lastTick = now;
   earn(cps() * dt);
+  fTick(dt, now);
+  state.playSecs += Math.min(dt, 2);
   if (state.tickets < ticketMax()) state.tickets = Math.min(ticketMax(), state.tickets + dt / ticketSeconds());
   if (now - lastClickAt > 1200) combo = Math.max(0, combo - dt * (1.5 - 0.3 * rk("c2b")));
-  if (rk("t3b") > 0) state.freeCases = Math.min(3, state.freeCases + dt / freeCaseSecs());
+  if (rk("t3b") > 0 && state.freeCases < 3) state.freeCases = Math.min(3, state.freeCases + dt / freeCaseSecs());
   checkTalentPoints(checkAchievements());
   autoBuy();
   render();
+  checkChallenge(now);
 }
 
 // ---------- 8. UI ----------
@@ -1065,13 +1517,14 @@ function renderUnits(g) {
 
 function render() {
   $("coins").textContent = fmt(state.coins) + " coins";
-  $("cps").textContent = `${fmt(cps())} / sec  |  x${globalMult().toFixed(2)} total bonus`;
+  $("cps").textContent = `${fmt(cps())} / sec  |  x${globalMult().toFixed(2)} total bonus` + (rule("clickeronly") ? "  |  per click: " + fmt(clickValue()) : "");
 
   GENERATORS.forEach(g => {
     const n = state.owned[g.id];
     const next = MILESTONES.find(m => m > n);
     const prev = [...MILESTONES].reverse().find(m => m <= n) || 0;
     $("own-" + g.id).textContent = "x" + n;
+    $("row-" + g.id).style.display = (n > 0 || g.baseCost <= 100 || state.lifetimeEarned >= g.baseCost * 0.3) ? "flex" : "none";
     $("info-" + g.id).textContent = `${fmt(genIncome(g))}/sec total` +
       (next ? ` | x2 at ${next}` : " | all milestones reached");
     $("bar-" + g.id).style.width = (next ? (n - prev) / (next - prev) * 100 : 100) + "%";
@@ -1111,6 +1564,9 @@ function render() {
   renderTalents();
   renderCases();
   renderBuff();
+  renderFoundry();
+  renderChallenge();
+  renderVictory();
 }
 
 // ---------- UPGRADES, FRENZY, TALENTS ----------
@@ -1127,22 +1583,27 @@ function buildUpgrades() {
     row.querySelector("button").onclick = () => buyUpg(u.id);
   });
 }
-function buyUpg(id) {
+function buyUpg(id, silent) {
+  if (rule("noupg")) { if (!silent) toast("Upgrades are disabled in this challenge."); return; }
   const u = UPGRADES.find(x => x.id === id);
   if (state.upg[id] || state.coins < u.cost) return;
   state.coins -= u.cost;
   state.upg[id] = true;
-  popRow($("urow-" + id));
-  toast(u.name + " unlocked!");
+  if (!silent) { popRow($("urow-" + id)); toast(u.name + " unlocked!"); }
 }
 function renderUpgrades() {
+  let hidden = 0;
   UPGRADES.forEach(u => {
     const own = state.upg[u.id];
     const b = $("ubuy-" + u.id);
     b.textContent = own ? "Owned" : "Buy: " + fmt(u.cost);
     b.disabled = own || state.coins < u.cost;
     $("urow-" + u.id).classList.toggle("owned", own);
+    const show = own || state.lifetimeEarned >= u.cost * 0.25;
+    $("urow-" + u.id).style.display = show ? "flex" : "none";
+    if (!show) hidden++;
   });
+  $("ushop-more").textContent = hidden ? hidden + " more upgrade" + (hidden > 1 ? "s" : "") + " will appear as you earn more" : "";
 }
 
 function activateFrenzy() {
@@ -1177,7 +1638,7 @@ function renderFrenzy() {
 }
 
 // --- talent tree ---
-const tColor = t => t.branch === 4 ? GRAND_COLOR : BRANCHES[t.branch].color;
+const tColor = t => t.branch === 5 ? GRAND_COLOR : BRANCHES[t.branch].color;
 const reqMet = t => t.req.every(p => rk(p) >= (t.rr || 1));
 
 function checkAchievements() {
@@ -1215,7 +1676,7 @@ function buildTalents() {
     const n = document.createElement("button");
     n.id = "tn-" + t.id;
     n.style.setProperty("--c", tColor(t));
-    if (t.branch === 4) {
+    if (t.branch === 5) {
       n.style.gridColumn = "1 / -1"; n.style.justifySelf = "center"; n.style.width = "min(360px, 100%)";
     } else if (t.col === undefined) {
       n.style.gridColumn = (2 * t.branch + 1) + " / span 2"; n.style.justifySelf = "center"; n.style.width = "82%";
@@ -1232,6 +1693,7 @@ function buildTalents() {
 }
 
 function buyTalent(id) {
+  if (rule("notalent")) { toast("Talents are disabled in this challenge."); return; }
   const t = TALENTS.find(x => x.id === id);
   const r = rk(id);
   if (r >= t.max) return;
@@ -1283,12 +1745,12 @@ function renderTalents(force) {
   if (!force && $("page-talents").style.display === "none") return;
   $("tp-info").textContent = "Talent Points: " + free + " available (" + tpEarned() + " earned, " + tpSpent() + " spent)";
   $("tp-next").textContent = "Next coin-milestone point at " + fmt(nextCoinTPAt()) + " lifetime coins (you have " + fmt(state.lifetimeEarned) + ").";
-  $("tp-break").textContent = "Sources: coins " + tpFromCoins() + " | ascensions " + (2 * state.ascensions) + " | transcensions " +
-    (5 * state.transcensions) + " | achievements " + tpAch() + " | drops " + state.bonusTP;
+  $("tp-break").textContent = "Sources: coins " + tpFromCoins() + " | ascensions " + ((1 + suLevel("echo")) * state.ascensions) + " | transcensions " +
+    (3 * state.transcensions) + " | achievements " + tpAch() + " | drops " + state.bonusTP;
   const life = state.lifetimeEarned;
   let frac;
-  if (life < 300) frac = life / 646;
-  else { const x = 3 * Math.log10(life / 300); frac = x - Math.floor(x); }
+  if (life < 2000) frac = life / 9283;
+  else { const x = 1.5 * Math.log10(life / 2000); frac = x - Math.floor(x); }
   $("tp-bar").style.width = (Math.max(0, Math.min(1, frac)) * 100) + "%";
   TALENTS.forEach(t => {
     const r = rk(t.id), maxed = r >= t.max, met = reqMet(t);
@@ -1320,13 +1782,16 @@ function drawTreeLines() {
 }
 
 function showPage(page) {
-  ["game", "cases", "talents"].forEach(p => {
+  ["game", "cases", "foundry", "talents", "victory"].forEach(p => {
     $("page-" + p).style.display = p === page ? "block" : "none";
     $("tab-" + p).classList.toggle("active", p === page);
   });
   $("app").classList.toggle("wide", page === "talents");
+  document.body.classList.toggle("foundry", page === "foundry");
   if (page === "talents") { renderTalents(true); requestAnimationFrame(drawTreeLines); }
   if (page === "cases") renderCases(true);
+  if (page === "foundry") renderFoundry(true);
+  if (page === "victory") renderVictory(true);
 }
 window.addEventListener("resize", drawTreeLines);
 
@@ -1339,8 +1804,7 @@ const currentSkin = () => SKINS.find(s => s.id === state.skin) || SKINS[0];
 const skinCount = () => SKINS.filter(s => !s.default && state.skins[s.id]).length;
 function applySkin() {
   const s = currentSkin(), c = $("clicker");
-  c.textContent = s.emoji;
-  c.style.setProperty("--g1", s.g[0]); c.style.setProperty("--g2", s.g[1]); c.style.setProperty("--g3", s.g[2]);
+  c.innerHTML = skinSvg(s, 150);
   c.style.setProperty("--glow", s.glow);
 }
 function equipSkin(id) {
@@ -1351,7 +1815,7 @@ function equipSkin(id) {
 // price follows your income (without temporary boosts) so cases stay relevant
 const caseCost = t => {
   const baseCps = cps() / (frenzyMult() * buffMult());
-  return Math.floor(Math.max(t.minCost, baseCps * t.secs) * (1 - 0.1 * rk("t1")) * (tal("t5") ? 0.75 : 1));
+  return Math.floor(Math.max(t.minCost, baseCps * t.secs) * (1 - 0.1 * rk("t1")) * (tal("t5") ? 0.75 : 1) * (upgOn("coupon") ? 0.85 : 1));
 };
 const bonusPower = () => 1 + 0.25 * rk("t4a");
 const dupPower = () => 1 + 0.5 * rk("t3a");
@@ -1388,7 +1852,7 @@ function oddsText(t) {
   const w = caseWeights(t), total = w.reduce((a, b) => a + b, 0);
   return w.map((x, i) => RARITIES[i].name + " " + (x / total * 100).toFixed(x / total < 0.1 ? 1 : 0) + "%").join(" | ");
 }
-const itemHtml = it => `<div class="ritem" style="--rc:${RARITIES[it.rarity].color}"><span class="ri">${it.icon}</span><span class="rn">${it.name}</span></div>`;
+const itemHtml = it => `<div class="ritem" style="--rc:${RARITIES[it.rarity].color}"><span class="ri">${itemIcon(it, 56)}</span><span class="rn">${it.name}</span></div>`;
 
 function startRoulette(prize, t) {
   const items = [];
@@ -1408,17 +1872,18 @@ function startRoulette(prize, t) {
 function openCase(id, free) {
   if (opening) return;
   const t = CASE_TIERS.find(x => x.id === id);
+  let paid = 0;
   if (free) {
     if (state.freeCases < 1) return;
     state.freeCases -= 1;
   } else {
     const c = caseCost(t);
     if (state.coins < c) { toast("Not enough coins"); return; }
-    state.coins -= c;
+    state.coins -= c; paid = c;
   }
   opening = true;
   const prize = pickItem(rollRarity(caseWeights(t)));
-  pending = { prize };
+  pending = { prize: prize, paid: free ? 0 : paid };
   $("case-result").textContent = "Opening...";
   startRoulette(prize, t);
   setTimeout(resolvePending, REDUCED_MOTION ? 0 : SPIN_MS + 150);
@@ -1444,16 +1909,17 @@ function applyPrize(p) {
 
 function resolvePending() {
   if (!pending) return;
-  const prize = pending.prize;
+  const prize = pending.prize, paid = pending.paid || 0;
   pending = null; opening = false;
-  const msg = applyPrize(prize);
+  let msg = applyPrize(prize);
+  if (paid && Math.random() < 0.05 * rk("t5b")) { state.coins += paid; msg += " | Fortune Cookie: case refunded!"; }
   state.casesOpened++;
   if (prize.rarity === 4) state.legends++;
   if (tal("t5")) state.tickets += 1;
   state.recent.unshift({ id: prize.id, msg: msg });
   state.recent = state.recent.slice(0, 8);
   const R = RARITIES[prize.rarity];
-  $("case-result").innerHTML = `<span style="color:${R.color};font-weight:800">${R.name}</span> ${prize.icon} <strong>${prize.name}</strong>: ${msg}`;
+  $("case-result").innerHTML = `<span style="color:${R.color};font-weight:800">${R.name}</span> ${itemIcon(prize, 26)} <strong>${prize.name}</strong>: ${msg}`;
   const r = $("roulette").getBoundingClientRect();
   burst(r.left + r.width / 2, r.top + r.height / 2, [R.color, "#ffffff"], 14 + prize.rarity * 18);
   if (prize.rarity >= 3) flash("radial-gradient(circle, " + R.color + ", transparent 70%)");
@@ -1478,6 +1944,7 @@ function buildCases() {
     const el = document.createElement("div");
     el.id = "skin-" + s.id;
     el.innerHTML = `<span class="sem"></span><span class="snm"></span><small></small>`;
+    el.children[0].innerHTML = skinSvg(s, 58);
     el.onclick = () => equipSkin(s.id);
     $("skins").appendChild(el);
   });
@@ -1495,7 +1962,7 @@ function renderCases(force) {
     b.disabled = opening || state.coins < c;
   });
   const fb = $("open-free");
-  if (rk("t3b") > 0) {
+  if (rk("t3b") > 0 || state.freeCases >= 1) {
     fb.style.display = "block";
     fb.textContent = "Free case (" + Math.floor(state.freeCases) + ")";
     fb.disabled = opening || state.freeCases < 1;
@@ -1505,13 +1972,12 @@ function renderCases(force) {
     const owned = !!state.skins[s.id], el = $("skin-" + s.id), R = RARITIES[s.rarity];
     el.className = "skin" + (owned ? " owned" : " locked") + (state.skin === s.id ? " equipped" : "");
     el.style.setProperty("--rc", R.color);
-    el.children[0].textContent = owned ? s.emoji : "❔";
     el.children[1].textContent = owned ? s.name : "???";
     el.children[2].textContent = s.default ? "Default" : R.name + " +" + (R.coll * 100).toFixed(0) + "%";
   });
   $("recent").innerHTML = state.recent.length ? state.recent.map(r => {
     const it = ITEMS.find(x => x.id === r.id);
-    return it ? `<div><span style="color:${RARITIES[it.rarity].color};font-weight:700">${it.icon} ${it.name}</span> - ${r.msg}</div>` : "";
+    return it ? `<div><span style="color:${RARITIES[it.rarity].color};font-weight:700">${itemIcon(it, 20)} ${it.name}</span> - ${r.msg}</div>` : "";
   }).join("") : "Nothing yet. Open a case!";
 }
 
@@ -1521,6 +1987,448 @@ function renderBuff() {
   el.style.display = "block";
   const s = Math.ceil((state.buffUntil - Date.now()) / 1000);
   el.textContent = "Boost x" + state.buffMult + " active: " + Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+}
+
+// ---------- FOUNDRY (second idler) ----------
+const foundryLink = () => 1 + (0.01 + 0.003 * rk("a3b")) * state.f.relicTotal;   // each Relic ever earned: +1% main-game coins
+const fRs = id => state.f.rshop[id] || 0;
+const fUp = id => !!state.f.upg[id];
+
+function fPerks() {
+  const r = FMILES.filter(m => state.f.rebirths >= m.at);
+  return {    prod: r.reduce((a, m) => a * (m.prod || 1), 1),
+    keep: Math.max(0, ...r.map(m => m.keep || 0)),
+    startEmbers: Math.max(0, ...r.map(m => m.startEmbers || 0)),
+    seed: Math.max(0, ...r.map(m => m.seed || 0)),
+    relicBonus: r.reduce((a, m) => a + (m.relicBonus || 0), 0),
+    autoGen: r.some(m => m.autoGen), autoUpg: r.some(m => m.autoUpg), autoReb: r.some(m => m.autoReb),
+  };
+}
+const fTotalGens = () => FGENS.reduce((s, g) => s + state.f.owned[g.id], 0);
+const fMileMult = n => Math.pow((fUp("mile") ? 2.5 : 2) * (1 + 0.05 * fRs("greater")), F_MILES.filter(m => n >= m).length);
+const fRelicMult = () => 1 + F_RELIC_BONUS * state.f.relicTotal * (fUp("relicp") ? 1.25 : 1);
+const fGlobal = () => fRelicMult() * metaMult() * fPerks().prod * (1 + 0.25 * rk("a3a")) * (fUp("overtime") ? 1.25 : 1) * (fUp("craft") ? 1.5 : 1) * (fUp("draft") ? 3 : 1) *
+  (1 + (fUp("interest") ? 0.002 * fTotalGens() : 0) + (fUp("loyal") ? 0.03 * Math.min(state.f.rebirths, 100) : 0));
+const fTier = g => g.tier === 0 ? fRs("deep") : g.tier === 1 ? fRs("higher") : fRs("cosmic");
+const fGenIncome = g => g.baseCps * state.f.owned[g.id] * fMileMult(state.f.owned[g.id]) * (fUp("u" + g.id) ? 2 : 1) * (1 + 0.25 * fTier(g)) * fGlobal();
+const fStokeBase = () => (fUp("hot") ? 2 : 1) * (fUp("anvil") ? 10 : 1) * (1 + 0.5 * fRs("surge")) * fGlobal();
+const fAutoIncome = () => fUp("astoke") ? fStokeBase() : 0;     // two stokes a second at half power
+const fCps = () => FGENS.reduce((s, g) => s + fGenIncome(g), 0) + fAutoIncome();
+const fStokeValue = () => fStokeBase() + (fUp("fan") ? 0.03 : 0) * fCps();
+const fCritChance = () => fUp("lucky") ? 0.10 : 0;
+const fCritMult = () => fUp("crit2") ? 25 : 10;
+const fDiscount = () => (fUp("cheap1") ? 0.95 : 1) * (fUp("cheap2") ? 0.95 : 1) * Math.pow(0.98, fRs("gear"));
+const fUnit = g => g.baseCost * Math.pow(F_GROWTH, state.f.owned[g.id]) * fDiscount();
+const fGainMult = () => (1 + fPerks().relicBonus + 0.1 * fRs("bounty") + 0.1 * rk("a5a")) * (tal("a6") ? 1.5 : 1);
+const fGain = () => Math.floor(Math.sqrt(state.f.run / F_REL_DIV) * fGainMult());
+const fNeeded = g => Math.pow(g / fGainMult(), 2) * F_REL_DIV;      // embers this run needed for g relics
+const fOfflineCap = () => (4 + fRs("smith")) * 3600;
+const fRshopCost = r => Math.ceil(r.baseCost * Math.pow(r.growth, fRs(r.id)));
+
+function fEarn(a) { const f = state.f; f.embers += a; f.run += a; f.life += a; }
+
+function fBuyInfo(g, mode) {
+  const f = state.f, unit = fUnit(g), gr = F_GROWTH;
+  const costFor = n => unit * (Math.pow(gr, n) - 1) / (gr - 1);
+  let n;
+  if (mode === "max") {
+    n = Math.max(0, Math.floor(Math.log(1 + f.embers * (gr - 1) / unit) / Math.log(gr)));
+    while (n > 0 && Math.ceil(costFor(n)) > f.embers) n--;
+  } else n = Number(mode);
+  return { n: n, cost: Math.ceil(costFor(n)), oneCost: Math.ceil(costFor(1)) };
+}
+
+function fBuy(id, mode, silent) {
+  const g = FGENS.find(x => x.id === id);
+  const info = fBuyInfo(g, mode || state.f.buy);
+  if (info.n < 1 || state.f.embers < info.cost) return;
+  state.f.embers -= info.cost;
+  state.f.owned[id] += info.n;
+  if (!silent) popRow($("frow-" + id));
+}
+
+function fBuyUpg(id, silent) {
+  const u = FUPGS.find(x => x.id === id), f = state.f;
+  if (f.upg[id] || f.embers < u.cost) return;
+  f.embers -= u.cost;
+  f.upg[id] = true;
+  if (!silent) { popRow($("fu-" + id)); toast(u.name + "!"); }
+}
+
+function fBuyRelic(id) {
+  const r = FRSHOP.find(x => x.id === id), f = state.f;
+  if (fRs(id) >= r.max) return;
+  const c = fRshopCost(r);
+  if (f.relics < c) return;
+  f.relics -= c;
+  f.rshop[id] = fRs(id) + 1;
+  if (id === "insight") { state.bonusTP += 1; toast("+1 main-game talent point!"); }
+  popRow($("fr-" + id));
+}
+
+function unlockFoundry() {
+  if (state.chal.id) { toast("The Foundry is closed during challenges."); return; }
+  if (state.f.unlocked || state.coins < F_UNLOCK_COST) return;
+  state.coins -= F_UNLOCK_COST;
+  state.f.unlocked = true;
+  state.f.runStart = Date.now();
+  burst(innerWidth / 2, innerHeight / 2, ["#f97316", "#fde047", "#ef4444", "#ffffff"], 60);
+  flash("radial-gradient(circle, rgba(249,115,22,.8), transparent 70%)");
+  toast("The Foundry is open!");
+  renderFoundry(true);
+}
+
+function stoke(e) {
+  if (!state.f.unlocked) return;
+  let v = fStokeValue();
+  const crit = Math.random() < fCritChance();
+  if (crit) v *= fCritMult();
+  fEarn(v);
+  state.f.stokes++;
+  let x = e.clientX, y = e.clientY;
+  if (!x && !y) { const r = $("f-stoke").getBoundingClientRect(); x = r.left + r.width / 2; y = r.top; }
+  floatText(x, y - 10, (crit ? "CRIT! " : "") + "+" + fmt(v), crit);
+}
+
+function rebirth(auto) {
+  const f = state.f, gain = fGain();
+  if (gain < 1) return;
+  if (!auto && !confirm("Rebirth now? Your embers, generators and most upgrades reset, but you gain " + gain + " Relic" + (gain > 1 ? "s" : "") + ".")) return;
+  const before = fRelicMult(), secs = Math.round((Date.now() - f.runStart) / 1000);
+  f.relics += gain; f.relicTotal += gain; f.rebirths++;
+  const p = fPerks();
+  f.embers = p.startEmbers + 500 * fRs("head");
+  f.run = 0;
+  f.owned = Object.fromEntries(FGENS.map(g => [g.id, 0]));
+  f.upg = {};
+  FUPGS.slice(0, p.keep).forEach(u => { f.upg[u.id] = true; });       // milestones keep the cheapest upgrades
+  if (p.seed) FGENS.slice(0, 5).forEach(g => { f.owned[g.id] = p.seed; });
+  if (fUp("kit")) { f.owned.f0 = Math.max(f.owned.f0, 10); f.owned.f1 = Math.max(f.owned.f1, 5); }
+  f.runStart = Date.now();
+  f.last = { n: f.rebirths, gain: gain, secs: secs, from: before, to: fRelicMult() };
+  burst(innerWidth / 2, innerHeight / 2, ["#7c3aed", "#f97316", "#fde047", "#ffffff"], 80);
+  flash("radial-gradient(circle, rgba(167,139,250,.85), rgba(234,88,12,.5) 55%, transparent 75%)");
+  const hit = FMILES.find(m => m.at === f.rebirths);
+  toast("Rebirth #" + f.rebirths + ": +" + gain + " Relics" + (hit ? " | Milestone: " + hit.text : ""));
+  renderFoundry(true);
+}
+
+function fTick(dt, now) {
+  const f = state.f;
+  if (!f.unlocked) return;
+  fEarn(fCps() * dt);
+  const p = fPerks();
+  if (p.autoGen) FGENS.forEach(g => { if (f.embers >= fBuyInfo(g, 1).cost) fBuy(g.id, 1, true); });
+  if (p.autoUpg) FUPGS.forEach(u => { if (!f.upg[u.id] && f.embers >= u.cost) fBuyUpg(u.id, true); });
+  if (p.autoReb && f.autoOn && fGain() >= Math.max(1, f.relics) && now - f.runStart > 20000) rebirth(true);
+}
+
+function buildFoundry() {
+  ["1", "10", "100", "max"].forEach(m => {
+    const b = document.createElement("button");
+    b.id = "f-mode-" + m; b.textContent = m === "max" ? "Max" : "x" + m;
+    b.onclick = () => { state.f.buy = m; renderFoundry(true); };
+    $("f-modes").appendChild(b);
+  });
+  FGENS.forEach(g => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "frow-" + g.id;
+    row.style.setProperty("--c", g.color);
+    row.innerHTML = `<div class="info"><div class="top"><span class="icon">${g.icon}</span><strong>${g.name}</strong> <span id="fown-${g.id}" class="muted"></span></div>
+      <small id="finfo-${g.id}"></small><div class="bar"><i id="fbar-${g.id}"></i></div></div><button id="fbuy-${g.id}"></button>`;
+    $("f-gens").appendChild(row);
+    $("fbuy-" + g.id).onclick = () => fBuy(g.id);
+  });
+  FUPGS.forEach(u => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "fu-" + u.id;
+    row.style.setProperty("--c", "#ea580c");
+    row.innerHTML = `<div class="info"><div class="top"><span class="icon">${u.icon}</span><strong>${u.name}</strong></div><small>${u.desc}</small></div><button id="fub-${u.id}"></button>`;
+    $("f-upgs").appendChild(row);
+    $("fub-" + u.id).onclick = () => fBuyUpg(u.id);
+  });
+  FMILES.forEach(m => {
+    const row = document.createElement("div");
+    row.className = "row fm"; row.id = "fm-" + m.at;
+    row.innerHTML = `<div class="info"><div class="top"><strong>${m.at} rebirth${m.at > 1 ? "s" : ""}</strong></div><small>${m.text}</small></div><span class="reward" id="fmst-${m.at}"></span>`;
+    $("f-miles").appendChild(row);
+  });
+  FRSHOP.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "fr-" + r.id;
+    row.style.setProperty("--c", "#fbbf24");
+    row.innerHTML = `<div class="info"><div class="top"><span class="icon">${r.icon}</span><strong>${r.name}</strong> <span id="frl-${r.id}" class="muted"></span></div>
+      <small>${r.desc}</small><div class="bar"><i id="frb-${r.id}"></i></div></div><button id="frbuy-${r.id}"></button>`;
+    $("f-rshop").appendChild(row);
+    $("frbuy-" + r.id).onclick = () => fBuyRelic(r.id);
+  });
+  $("f-unlock").onclick = unlockFoundry;
+  $("f-stoke").onclick = stoke;
+  $("f-rebirth").onclick = () => rebirth(false);
+  $("f-auto").onchange = e => { state.f.autoOn = e.target.checked; };
+}
+
+function renderFoundry(force) {
+  const f = state.f;
+  $("tab-foundry").textContent = f.unlocked ? "Foundry" : "Foundry \u{1F512}";
+  if (!force && $("page-foundry").style.display === "none") return;
+  $("f-locked").style.display = f.unlocked ? "none" : "block";
+  $("f-main").style.display = f.unlocked ? "block" : "none";
+  if (!f.unlocked) {
+    const b = $("f-unlock");
+    b.textContent = "Unlock the Foundry: " + fmt(F_UNLOCK_COST) + " coins";
+    b.disabled = state.coins < F_UNLOCK_COST;
+    return;
+  }
+  $("f-embers").textContent = fmt(f.embers) + " embers";
+  $("f-cps").textContent = fmt(fCps()) + " / sec  |  Relic bonus x" + fRelicMult().toFixed(2) + "  |  main-game coins x" + foundryLink().toFixed(2);
+  $("f-stoke").textContent = "Stoke the Fire (+" + fmt(fStokeValue()) + ")";
+
+  // rebirth panel
+  const gain = fGain(), cur = fRelicMult();
+  const nextMult = 1 + F_RELIC_BONUS * (f.relicTotal + gain) * (fUp("relicp") ? 1.25 : 1);
+  const good = gain >= Math.max(1, f.relics * 0.5);
+  const rb = $("f-rebirth");
+  rb.disabled = gain < 1;
+  rb.classList.toggle("ready", gain >= 1);
+  rb.textContent = gain >= 1 ? "Rebirth: +" + fmtInt(gain) + " Relics" + (good ? " (good time!)" : "") : "Rebirth (earn " + fmt(F_REL_DIV) + " embers this run)";
+  const lo = gain >= 1 ? fNeeded(gain) : 0, hi = fNeeded(gain + 1);
+  $("f-rbar").style.width = (Math.max(0, Math.min(1, (f.run - lo) / (hi - lo))) * 100) + "%";
+  $("f-rinfo").textContent = (gain >= 1 ? "Relic bonus x" + cur.toFixed(2) + " -> x" + nextMult.toFixed(2) + " (+" + ((nextMult / cur - 1) * 100).toFixed(0) + "%). " : "") +
+    "Next Relic at " + fmt(hi) + " embers this run (" + fmt(f.run) + " so far). Relics: " + fmtInt(f.relics) + " unspent, " + fmtInt(f.relicTotal) + " earned.";
+  $("f-last").textContent = f.last ? "Last rebirth (#" + f.last.n + "): +" + fmtInt(f.last.gain) + " Relics in " + Math.floor(f.last.secs / 60) + "m " + (f.last.secs % 60) + "s, bonus x" +
+    f.last.from.toFixed(2) + " -> x" + f.last.to.toFixed(2) : "No rebirths yet. Your first one is worth it quickly: every Relic is a permanent boost.";
+  const p = fPerks();
+  $("f-auto-wrap").style.display = p.autoReb ? "block" : "none";
+  $("f-auto").checked = f.autoOn;
+
+  // generators
+  ["1", "10", "100", "max"].forEach(m => $("f-mode-" + m).classList.toggle("active", f.buy === m));
+  FGENS.forEach((g, i) => {
+    const n = f.owned[g.id];
+    const show = i < 2 || n > 0 || f.life >= g.baseCost * 0.3;
+    $("frow-" + g.id).style.display = show ? "flex" : "none";
+    if (!show) return;
+    const next = F_MILES.find(m => m > n), prev = [...F_MILES].reverse().find(m => m <= n) || 0;
+    $("fown-" + g.id).textContent = "x" + fmtInt(n);
+    $("finfo-" + g.id).textContent = fmt(fGenIncome(g)) + "/sec total" + (next ? " | milestone x" + (fUp("mile") ? "2.5" : "2") + " at " + next : " | all milestones reached");
+    $("fbar-" + g.id).style.width = (next ? (n - prev) / (next - prev) * 100 : 100) + "%";
+    const info = fBuyInfo(g, f.buy), shown = info.n >= 1 ? info : { n: 1, cost: info.oneCost };
+    const b = $("fbuy-" + g.id);
+    b.textContent = "Buy " + fmtInt(shown.n) + ": " + fmt(shown.cost);
+    b.disabled = info.n < 1 || f.embers < info.cost;
+    b.style.setProperty("--c", g.color);
+  });
+
+  // upgrades
+  let hidden = 0;
+  FUPGS.forEach(u => {
+    const own = !!f.upg[u.id], show = own || f.life >= u.cost * 0.25;
+    $("fu-" + u.id).style.display = show ? "flex" : "none";
+    if (!show) { hidden++; return; }
+    $("fu-" + u.id).classList.toggle("owned", own);
+    const b = $("fub-" + u.id);
+    b.textContent = own ? "Owned" : "Buy: " + fmt(u.cost);
+    b.disabled = own || f.embers < u.cost;
+  });
+  $("f-upgs-more").textContent = hidden ? hidden + " more upgrade" + (hidden > 1 ? "s" : "") + " will appear as you earn more (" + FUPGS.length + " total)" : "";
+
+  // milestones
+  const nextM = FMILES.find(m => f.rebirths < m.at);
+  $("f-mile-info").textContent = nextM ? "Rebirths: " + f.rebirths + ". Next milestone at " + nextM.at + ": " + nextM.text : "Rebirths: " + f.rebirths + ". Every milestone reached!";
+  const prevAt = [...FMILES].reverse().find(m => f.rebirths >= m.at);
+  $("f-mbar").style.width = (nextM ? (f.rebirths - (prevAt ? prevAt.at : 0)) / (nextM.at - (prevAt ? prevAt.at : 0)) * 100 : 100) + "%";
+  FMILES.forEach(m => {
+    const done = f.rebirths >= m.at, isNext = nextM && nextM.at === m.at;
+    const row = $("fm-" + m.at);
+    row.classList.toggle("done", done); row.classList.toggle("next", !!isNext);
+    $("fmst-" + m.at).textContent = done ? "Unlocked" : isNext ? (m.at - f.rebirths) + " to go" : "";
+  });
+
+  // relic shop
+  $("f-relics").textContent = "(" + fmtInt(f.relics) + " Relics to spend)";
+  FRSHOP.forEach(r => {
+    const lvl = fRs(r.id), maxed = lvl >= r.max, c = fRshopCost(r);
+    $("frl-" + r.id).textContent = "Lv " + lvl + "/" + r.max;
+    $("frb-" + r.id).style.width = (lvl / r.max * 100) + "%";
+    const b = $("frbuy-" + r.id);
+    b.textContent = maxed ? "MAX" : c + " Relics";
+    b.disabled = maxed || f.relics < c;
+  });
+}
+
+// embers drift up from the stoke button while the Foundry runs
+setInterval(() => {
+  if (REDUCED_MOTION || document.hidden || !state.f.unlocked || $("page-foundry").style.display === "none" || fCps() <= 0) return;
+  const r = $("f-stoke").getBoundingClientRect();
+  const el = document.createElement("div");
+  el.className = "rise";
+  el.textContent = "\u{1F525}";
+  el.style.left = (r.left + Math.random() * r.width) + "px";
+  el.style.top = (r.top + r.height * 0.5) + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}, 450);
+
+// ---------- VICTORY AND CHALLENGES ----------
+const fmtTime = s => { s = Math.round(s); const hh = Math.floor(s / 3600), mm = Math.floor(s % 3600 / 60); return hh ? hh + "h " + mm + "m" : mm + "m " + (s % 60) + "s"; };
+const chalDef = () => CHALLENGES.find(c => c.id === state.chal.id);
+const victoryReady = () => VICTORY_REQS.every(r => r.cur() >= r.goal);
+const resetUi = () => document.querySelectorAll(".units").forEach(u => { u.innerHTML = ""; delete u.dataset.n; });
+
+function claimVictory() {
+  if (state.chal.id || state.won || !victoryReady()) return;
+  state.meta.wins += 1;
+  state.meta.winTimes.push(Math.round(state.playSecs));
+  state.won = true;
+  showVictory();
+  renderVictory(true);
+}
+
+function showVictory() {
+  const m = state.meta, f = state.f;
+  $("v-stats").innerHTML =
+    "You bought everything and beat the game!<br>" +
+    "Time played: <b>" + fmtTime(state.playSecs) + "</b><br>" +
+    "Lifetime coins: <b>" + fmt(state.lifetimeEarned) + "</b> | Clicks: <b>" + fmtInt(state.clicks) + "</b><br>" +
+    "Ascensions: <b>" + state.ascensions + "</b> | Transcensions: <b>" + state.transcensions + "</b> | Foundry rebirths: <b>" + f.rebirths + "</b><br>" +
+    "Cases opened: <b>" + state.casesOpened + "</b> | Challenges cleared: <b>" + chalCount() + "/" + CHALLENGES.length + "</b><br>" +
+    "Total wins: <b>" + m.wins + "</b> (New Game+ makes all coins x" + winMult().toFixed(1) + ")";
+  $("victory").style.display = "flex";
+  let n = 0;
+  const iv = setInterval(() => {
+    burst(Math.random() * innerWidth, Math.random() * innerHeight * 0.7, ["#fbbf24", "#fb7185", "#7ad7ff", "#a78bfa", "#34d399"], 40);
+    if (++n > 14) clearInterval(iv);
+  }, 450);
+  flash("radial-gradient(circle, rgba(251,191,36,.8), transparent 70%)");
+}
+
+function newGamePlus() {
+  if (state.chal.id) return;
+  if (!confirm("Start New Game+? Everything resets (coins, generators, prestige, talents, skins, the Foundry), but you keep your wins and challenge medals. Every win gives +50% to all coins.")) return;
+  if (pending) resolvePending();
+  const meta = state.meta;
+  state = freshState();
+  state.meta = meta;
+  combo = 0; opening = false; pending = null; bj = null; renderBj(); applySkin(); resetUi();
+  $("victory").style.display = "none";
+  showPage("game");
+  toast("New Game+! All coins x" + winMult().toFixed(1) + " from your victories.");
+}
+
+// --- challenges: a separate run from scratch; your real game is stored in state.chal.vault ---
+function startChallenge(id) {
+  if (state.chal.id) return;
+  const c = CHALLENGES.find(x => x.id === id);
+  if (!confirm("Start the \"" + c.name + "\" challenge? Your main game is saved and comes back when you finish or abandon it.\n\nRule: " + c.text + "\nGoal: earn " + fmt(c.goal) + " coins.")) return;
+  if (pending) resolvePending();
+  const vault = JSON.stringify(state), meta = state.meta;
+  state = freshState();
+  state.meta = meta;
+  state.chal = { id: id, start: Date.now(), vault: vault };
+  if (c.rules.includes("noclick")) state.coins = 30;   // enough for the first generator, since you cannot click
+  combo = 0; opening = false; pending = null; bj = null; renderBj(); applySkin(); resetUi();
+  showPage("game");
+  toast("Challenge started: " + c.name);
+}
+
+function endChallenge(done, secs) {
+  const c = chalDef(), meta = state.meta, vault = state.chal.vault;
+  if (pending) resolvePending();
+  state = JSON.parse(vault);
+  state.meta = meta;
+  state.chal = { id: null, start: 0, vault: null };
+  state.lastTick = Date.now();
+  if (done) {
+    const first = !meta.chalDone[c.id];
+    if (first) { meta.chalDone[c.id] = { best: Math.round(secs) }; state.bonusTP += c.tp; }
+    else if (secs < meta.chalDone[c.id].best) meta.chalDone[c.id].best = Math.round(secs);
+    toast(first ? "Challenge cleared: " + c.name + "! +" + c.tp + " talent points and coins x1.15 forever" : c.name + " cleared again in " + fmtTime(secs));
+    burst(innerWidth / 2, innerHeight / 2, ["#fbbf24", "#34d399", "#7ad7ff", "#ffffff"], 80);
+    flash("radial-gradient(circle, rgba(52,211,153,.8), transparent 70%)");
+  }
+  combo = 0; opening = false; pending = null; bj = null; renderBj(); applySkin(); resetUi();
+  showPage("victory");
+}
+
+function abandonChallenge() {
+  if (!state.chal.id) return;
+  if (!confirm("Abandon this challenge? You get no reward and your main game comes back.")) return;
+  endChallenge(false, 0);
+  toast("Challenge abandoned. Welcome back.");
+}
+
+function checkChallenge(now) {
+  const c = state.chal.id ? chalDef() : null;
+  if (!c) return;
+  const secs = (now - state.chal.start) / 1000;
+  if (state.lifetimeEarned >= c.goal) endChallenge(true, secs);
+  else if (c.limit && secs > c.limit) { endChallenge(false, secs); toast("Time's up! The " + c.name + " challenge failed."); }
+}
+
+function renderChallenge() {
+  const b = $("chal-banner"), c = state.chal.id ? chalDef() : null;
+  if (!c) { b.style.display = "none"; return; }
+  b.style.display = "block";
+  const secs = (Date.now() - state.chal.start) / 1000;
+  $("chal-text").textContent = c.icon + " CHALLENGE: " + c.name + "  |  " + fmt(state.lifetimeEarned) + " / " + fmt(c.goal) + " coins  |  " +
+    (c.limit ? "time left " + fmtTime(Math.max(0, c.limit - secs)) : "time " + fmtTime(secs));
+  $("chal-bar").style.width = Math.min(100, state.lifetimeEarned / c.goal * 100) + "%";
+}
+
+function buildVictory() {
+  VICTORY_REQS.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "row vr"; row.id = "vr-" + r.id;
+    row.innerHTML = `<div class="info"><div class="top"><strong>${r.name}</strong> <span class="muted" id="vrp-${r.id}"></span></div>
+      <small>${r.desc}</small><div class="bar"><i id="vrb-${r.id}"></i></div></div><span class="reward" id="vrs-${r.id}"></span>`;
+    $("v-reqs").appendChild(row);
+  });
+  CHALLENGES.forEach(c => {
+    const row = document.createElement("div");
+    row.className = "row"; row.id = "ch-" + c.id;
+    row.style.setProperty("--c", "#f43f5e");
+    row.innerHTML = `<div class="info"><div class="top"><span class="icon">${c.icon}</span><strong>${c.name}</strong> <span class="muted" id="chs-${c.id}"></span></div>
+      <small>${c.text}</small><small>Goal: ${fmt(c.goal)} coins | First clear: +${c.tp} talent points and coins x1.15</small></div>
+      <button id="chb-${c.id}">Start</button>`;
+    $("v-chals").appendChild(row);
+    $("chb-" + c.id).onclick = () => startChallenge(c.id);
+  });
+  $("v-claim").onclick = claimVictory;
+  $("v-ngp").onclick = newGamePlus;
+  $("v-ngp2").onclick = newGamePlus;
+  $("v-keep").onclick = () => { $("victory").style.display = "none"; };
+  $("chal-abandon").onclick = abandonChallenge;
+}
+
+function renderVictory(force) {
+  if (!force && $("page-victory").style.display === "none") return;
+  const m = state.meta, inCh = !!state.chal.id;
+  let done = 0;
+  VICTORY_REQS.forEach(r => {
+    const cur = r.cur(), ok = cur >= r.goal;
+    if (ok) done++;
+    $("vr-" + r.id).classList.toggle("done", ok);
+    $("vrp-" + r.id).textContent = fmtInt(Math.min(cur, r.goal)) + "/" + fmtInt(r.goal);
+    $("vrb-" + r.id).style.width = (Math.min(1, cur / r.goal) * 100) + "%";
+    $("vrs-" + r.id).textContent = ok ? "Done" : "";
+  });
+  $("v-sum").textContent = "(" + done + "/" + VICTORY_REQS.length + " requirements)";
+  const ready = victoryReady(), btn = $("v-claim");
+  btn.disabled = !ready || state.won || inCh;
+  btn.classList.toggle("ready", ready && !state.won && !inCh);
+  btn.textContent = inCh ? "Finish or abandon your challenge first" : state.won ? "Victory claimed!" : ready ? "CLAIM VICTORY" : "Complete every requirement to claim victory";
+  $("v-info").textContent = "Wins: " + m.wins + " (all coins x" + winMult().toFixed(1) + ") | Best time: " +
+    (m.winTimes.length ? fmtTime(Math.min(...m.winTimes)) : "-") + " | This run: " + fmtTime(state.playSecs);
+  $("v-ngp").style.display = state.won && !inCh ? "block" : "none";
+  $("c-sum").textContent = "(" + chalCount() + "/" + CHALLENGES.length + " cleared, coins x" + Math.pow(medalBase(), chalCount()).toFixed(2) + ")";
+  CHALLENGES.forEach(c => {
+    const d = m.chalDone[c.id], active = state.chal.id === c.id;
+    $("chs-" + c.id).textContent = active ? "In progress" : d ? "Cleared (best " + fmtTime(d.best) + ")" : "Not cleared";
+    $("ch-" + c.id).style.setProperty("--c", d ? "#34d399" : "#f43f5e");
+    $("chb-" + c.id).textContent = active ? "Running" : d ? "Replay" : "Start";
+    $("chb-" + c.id).disabled = inCh;
+  });
 }
 
 // ---------- 9. SAVE / LOAD ----------
@@ -1539,10 +2447,18 @@ function load() {
       upg: { ...base.upg, ...saved.upg },
       talents: Object.fromEntries(TALENTS.map(t => [t.id, Math.min(t.max, Number(saved.talents && saved.talents[t.id]) || 0)])),
       skins: { ...base.skins, ...saved.skins },
-      ach: { ...base.ach, ...saved.ach } };
+      ach: { ...base.ach, ...saved.ach },
+      f: { ...base.f, ...(saved.f || {}),
+           owned: { ...base.f.owned, ...((saved.f || {}).owned || {}) },
+           upg: { ...((saved.f || {}).upg || {}) },
+           rshop: { ...base.f.rshop, ...((saved.f || {}).rshop || {}) } },
+      meta: { ...base.meta, ...(saved.meta || {}),
+              winTimes: [...((saved.meta || {}).winTimes || [])], chalDone: { ...((saved.meta || {}).chalDone || {}) } },
+      chal: { ...base.chal, ...(saved.chal || {}) } };
     const cap = (BASE_OFFLINE_HOURS + 2 * suLevel("timewarp") + 4 * rk("f4b") + (tal("ascend") ? 16 : 0)) * 3600;
     const away = Math.min((Date.now() - state.lastTick) / 1000, cap);
     earn(cps() * away);
+    if (state.f.unlocked) fEarn(fCps() * Math.min((Date.now() - state.lastTick) / 1000, fOfflineCap()));
     if (state.tickets < ticketMax()) state.tickets = Math.min(ticketMax(), state.tickets + away / ticketSeconds());
     state.lastTick = Date.now();
   } catch (e) { state = freshState(); }
@@ -1553,6 +2469,8 @@ $("clicker").onclick = clickCoin;
 $("frenzy").onclick = activateFrenzy;
 $("tab-game").onclick = () => showPage("game");
 $("tab-cases").onclick = () => showPage("cases");
+$("tab-foundry").onclick = () => showPage("foundry");
+$("tab-victory").onclick = () => showPage("victory");
 $("tab-talents").onclick = () => showPage("talents");
 $("respec").onclick = respec;
 $("ascend").onclick = ascend;
@@ -1575,6 +2493,8 @@ buildUpgrades();
 buildTalents();
 buildAchievements();
 buildCases();
+buildFoundry();
+buildVictory();
 applySkin();
 showPage("game");
 resizeStars();
