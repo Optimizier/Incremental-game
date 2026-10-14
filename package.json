@@ -1,6 +1,6 @@
 {
   "name": "incremental-game",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Offline desktop version of Incremental Game with automatic updates",
   "author": "Optimizier",
   "private": true,
